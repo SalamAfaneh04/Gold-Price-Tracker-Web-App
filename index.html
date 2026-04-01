@@ -1,172 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GoldVault – Live Gold Price Tracker</title>
   <link rel="icon" href="assets/images/gold_logo.png" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="cssFiles/style.css">
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="nav-brand">
-    <span class="nav-icon">⬡</span>
-    <span class="nav-title">GoldVault</span>
-  </div>
-  <ul class="nav-links">
-    <li><a href="index.html" class="active">Home</a></li>
-    <li><a href="prices.html">Gold Prices</a></li>
-    <li><a href="myAssets.html">My Assets</a></li>
-  </ul>
-  <div class="nav-auth">
-    <a href="#" class="btn-ghost">Login</a>
-    <a href="#" class="btn-gold">Register</a>
-  </div>
-  <button class="nav-toggle" id="navToggle">☰</button>
-</nav>
-
-<!-- TICKER -->
-<div class="ticker-bar">
-  <div class="ticker-track" id="tickerTrack">
-    <span class="ticker-item">🔴 Loading live prices...</span>
-  </div>
-</div>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg-text">GOLD</div>
-  <div class="hero-content">
-    <div class="hero-left">
-      <p class="hero-eyebrow">Live Market Data</p>
-      <h1 class="hero-title">Track Gold.<br><em>Grow Wealth.</em></h1>
-      <p class="hero-sub">Real-time XAU prices, portfolio tracking, and profit insights — all in one place.</p>
-
-      <div class="live-price-card" id="livePriceCard">
-        <div class="live-badge">● LIVE</div>
-        <div class="price-row">
-          <div class="price-block">
-            <span class="price-label">USD / oz</span>
-            <span class="price-value" id="priceUSD">—</span>
-          </div>
-          <div class="price-divider"></div>
-          <div class="price-block">
-            <span class="price-label">JOD / oz</span>
-            <span class="price-value" id="priceJOD">—</span>
-          </div>
-        </div>
-        <div class="price-meta">
-          <span id="priceTime">Fetching...</span>
-        </div>
-      </div>
-
-      <div class="hero-cta">
-        <a href="prices.html" class="btn-gold-lg">View All Prices</a>
-        <a href="myAssets.html" class="btn-outline-lg">Manage Assets →</a>
-      </div>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="nav-icon">⬡</span>
+      <span class="nav-title">GoldVault</span>
     </div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="prices.html">Gold Prices</a></li>
+      <li><a href="myAssets.html">My Assets</a></li>
+    </ul>
+    <div class="nav-auth">
+      <a href="#" class="btn-ghost">Login</a>
+      <a href="#" class="btn-gold">Register</a>
+    </div>
+    <button class="nav-toggle" id="navToggle">☰</button>
+  </nav>
 
-    <div class="hero-right">
-      <div class="chart-card">
-        <div class="chart-header">
-          <span class="chart-title">Price Chart <span class="chart-sub">Last 30 days</span></span>
-          <div class="chart-currency-toggle">
-            <button class="ctoggle active" onclick="toggleChart('USD',this)">USD</button>
-            <button class="ctoggle" onclick="toggleChart('JOD',this)">JOD</button>
+  <!-- TICKER -->
+  <div class="ticker-bar">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ticker-item">🔴 Loading live prices...</span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-text">GOLD</div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <p class="hero-eyebrow">Live Market Data</p>
+        <h1 class="hero-title">Track Gold.<br><em>Grow Wealth.</em></h1>
+        <p class="hero-sub">Real-time XAU prices, portfolio tracking, and profit insights — all in one place.</p>
+
+        <div class="live-price-card" id="livePriceCard">
+          <div class="live-badge">● LIVE</div>
+          <div class="price-row">
+            <div class="price-block">
+              <span class="price-label">USD / oz</span>
+              <span class="price-value" id="priceUSD">—</span>
+            </div>
+            <div class="price-divider"></div>
+            <div class="price-block">
+              <span class="price-label">JOD / oz</span>
+              <span class="price-value" id="priceJOD">—</span>
+            </div>
+          </div>
+          <div class="price-meta">
+            <span id="priceTime">Fetching...</span>
           </div>
         </div>
-        <canvas id="priceChart" height="220"></canvas>
+
+        <div class="hero-cta">
+        <div class="hero-cta">
+          <a href="prices.html" class="btn-gold-lg">View All Prices</a>
+          <a href="myAssets.html" class="btn-outline-lg">Manage Assets →</a>
+        </div>
+        <div class="currency-toggle">
+              <button class="toggle-btn active" id="btnUSD" onclick="setCurrency('USD')">USD</button>
+              <button class="toggle-btn" id="btnJOD" onclick="setCurrency('JOD')">JOD</button>
+            </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Price Chart <span class="chart-sub">Last 30 days</span></span>
+            <div class="chart-currency-toggle">
+              <button class="ctoggle active" onclick="toggleChart('USD',this)">USD</button>
+              <button class="ctoggle" onclick="toggleChart('JOD',this)">JOD</button>
+            </div>
+          </div>
+          <canvas id="priceChart" height="220"></canvas>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- GOLD RATES STRIP -->
-<section class="rates-strip">
-  <div class="rates-grid">
-    <div class="rate-card karat24">
-      <div class="rate-karat">24K</div>
-      <div class="rate-name">Pure Gold</div>
-      <div class="rate-price" id="rate24">—</div>
-      <div class="rate-unit">per gram</div>
-    </div>
-    <div class="rate-card karat21">
-      <div class="rate-karat">21K</div>
-      <div class="rate-name">Premium</div>
-      <div class="rate-price" id="rate21">—</div>
-      <div class="rate-unit">per gram</div>
-    </div>
-    <div class="rate-card karat18">
-      <div class="rate-karat">18K</div>
-      <div class="rate-name">Standard</div>
-      <div class="rate-price" id="rate18">—</div>
-      <div class="rate-unit">per gram</div>
-    </div>
-    <div class="rate-card coin-card">
-      <img src="assets/images/rashadi_coin.png" alt="Rashadi Coin" class="coin-img"/>
-      <div class="rate-karat">Rashadi</div>
-      <div class="rate-price" id="rateRashadi">—</div>
-      <div class="rate-unit">per lira</div>
-    </div>
-    <div class="rate-card coin-card">
-      <img src="assets/images/english_coin.png" alt="English Coin" class="coin-img"/>
-      <div class="rate-karat">English</div>
-      <div class="rate-price" id="rateEnglish">—</div>
-      <div class="rate-unit">per lira</div>
-    </div>
-    <div class="rate-card bar-card">
-      <img src="assets/images/gold-bar.jpg" alt="Gold Bar" class="bar-img"/>
-      <div class="rate-karat">Gold Bar</div>
-      <div class="rate-price" id="rateBar">—</div>
-      <div class="rate-unit">1 kg bar</div>
-    </div>
-  </div>
-</section>
-
-<!-- NEWS SECTION -->
-<section class="news-section">
-  <div class="section-header">
-    <h2 class="section-title">Market <em>Insights</em></h2>
-    <p class="section-sub">Latest gold market news</p>
-  </div>
-  <div class="news-grid" id="newsGrid">
-    <div class="news-skeleton"></div>
-    <div class="news-skeleton"></div>
-    <div class="news-skeleton"></div>
-  </div>
-</section>
-
-<!-- ADD ASSETS -->
-<section class="cta-section">
-  <div class="cta-inner">
-    <h2 class="cta-title">Track Your Gold Assets</h2>
-    <p class="cta-sub">Add your jewelry, coins, and bars — see real-time profit & loss</p>
-    <div class="asset-types">
-      <div class="asset-type">
-        <div class="asset-icon"><img src="assets/images/gold-jewelry.png" alt="Jewelry"></div>
-        <span>Jewelry</span>
+  <!-- GOLD RATES STRIP -->
+  <section class="rates-strip">
+    <div class="rates-grid">
+      <div class="rate-card karat24">
+        <div class="rate-karat">24K</div>
+        <div class="rate-name">Pure Gold</div>
+        <div class="rate-price" id="rate24">—</div>
+        <div class="rate-unit">per gram</div>
       </div>
-      <div class="asset-type">
-        <div class="asset-icon"><img src="assets/images/rashadi_coin.png" alt="Rashadi Coin"></div>
-        <span>Coins</span>
+      <div class="rate-card karat21">
+        <div class="rate-karat">21K</div>
+        <div class="rate-name">Premium</div>
+        <div class="rate-price" id="rate21">—</div>
+        <div class="rate-unit">per gram</div>
       </div>
-      <div class="asset-type">
-        <div class="asset-icon"><img src="assets/images/square_gold.png" alt="Gold Bar"></div>
-        <span>Gold Bars</span>
+      <div class="rate-card karat18">
+        <div class="rate-karat">18K</div>
+        <div class="rate-name">Standard</div>
+        <div class="rate-price" id="rate18">—</div>
+        <div class="rate-unit">per gram</div>
+      </div>
+      <div class="rate-card coin-card">
+        <img src="assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="coin-img" />
+        <div class="rate-karat">Rashadi</div>
+        <div class="rate-price" id="rateRashadi">—</div>
+        <div class="rate-unit">per lira</div>
+      </div>
+      <div class="rate-card coin-card">
+        <img src="assets/coins/english_coin.png" alt="English Coin" class="coin-img" />
+        <div class="rate-karat">English</div>
+        <div class="rate-price" id="rateEnglish">—</div>
+        <div class="rate-unit">per lira</div>
+      </div>
+      <div class="rate-card bar-card">
+        <img src="assets/bars/gold-bar.jpg" alt="Gold Bar" class="bar-img" />
+        <div class="rate-karat">Gold Bar</div>
+        <div class="rate-price" id="rateBar">—</div>
+        <div class="rate-unit">1 kg bar</div>
       </div>
     </div>
-    <a href="myAssets.html" class="btn-gold-lg">Manage Your Assets →</a>
-  </div>
-</section>
+  </section>
 
-<footer class="footer">
-  <p>© 2026 GoldVault · Built with real XAU data</p>
-</footer>
+  <!-- NEWS SECTION -->
+  <section class="news-section">
+    <div class="section-header">
+      <h2 class="section-title">Market <em>Insights</em></h2>
+      <p class="section-sub">Latest gold market news</p>
+    </div>
+    <div class="news-grid" id="newsGrid">
+      <div class="news-skeleton"></div>
+      <div class="news-skeleton"></div>
+      <div class="news-skeleton"></div>
+    </div>
+  </section>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="jsFiles/app.js"></script>
+  <!-- ADD ASSETS -->
+  <section class="cta-section">
+    <div class="cta-inner">
+      <h2 class="cta-title">Track Your Gold Assets</h2>
+      <p class="cta-sub">Add your jewelry, coins, and bars — see real-time profit & loss</p>
+      <div class="asset-types">
+        <div class="asset-type">
+          <div class="asset-icon"><img src="assets/images/gold-jewelry.png" alt="Jewelry"></div>
+          <span>Jewelry</span>
+        </div>
+        <div class="asset-type">
+          <div class="asset-icon"><img src="assets/coins/rashadi_coin.png" alt="Rashadi Coin"></div>
+          <span>Coins</span>
+        </div>
+        <div class="asset-type">
+          <div class="asset-icon"><img src="assets/bars/square_gold.png" alt="Gold Bar"></div>
+          <span>Gold Bars</span>
+        </div>
+      </div>
+      <a href="myAssets.html" class="btn-gold-lg">Manage Your Assets →</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2026 GoldVault · Built with real XAU data</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="jsFiles/app.js"></script>
 </body>
+
 </html>
