@@ -86,3 +86,101 @@ we call fetchLiveGoldPrice() in two places:
     2. Repeatedly with setInterval(fetchLiveGoldPrice, 60000); to auto-refresh every 60 seconds.
 
 That combination gives you live updating prices without the user needing to refresh manually.
+
+====================== price calculations ======================
+***
+
+## [1. From ounce price → 24K price per gram] ##
+
+The API gives you **XAU price per troy ounce in USD** 
+(for example, 3000 USD/oz). [goldprice](https://goldprice.org/gold-price.html)
+
+In code: 
+
+{js file}
+```
+function getPricePerGram24K(ozPriceUSD) {
+  return ozPriceUSD / gramsPerTroyOz;
+}
+```
+
+- `gramsPerTroyOz = 31.1035;` (fixed conversion). [metric-calculator](https://metric-calculator.com/convert-troy-ounce-to-gram.htm)
+- So if gold is 3000 USD/oz then:
+    24K price per gram = 3000/31.1035 ≈ approx 96.4 USD/g
+That is the **pure gold price** (24K) per gram.
+
+***
+
+## [2. From 24K to any karat (21K, 18K, etc.)] ##
+
+You use the karat **purity ratio**: karat / 24. [omnicalculator](https://www.omnicalculator.com/finance/gold-melt)
+
+{js file}
+```
+function getPricePerGramByKarat(ozPriceUSD, karat) {
+  var purityRatio = karat / 24;
+  return getPricePerGram24K(ozPriceUSD) * purityRatio;
+}
+```
+
+Examples (assuming 96.4 USD/g for 24K):
+
+- 21K: purity = 21/24 = 0.875 → (96.4 × 0.875 ≈ 84.4) USD/g
+- 18K: purity = 18/24 = 0.75 → (96.4 × 0.75 ≈ 72.3) USD/g
+
+So formula is:
+
+    price per gram (karat K) = price per gram (24K) × (K/24)
+    
+        ex: If the price of 24K gold is ($100) per gram and you want to know the price of (18K) gold:
+        1. Formula: 100 * (18/24)
+        2. Ratio: 18 / 24 = 0.75  (18K gold is 75% pure)
+        3. Calculation: 100 * 0.75 = 75 USD/g
+
+***
+
+## [3. From USD → JOD] ##
+
+we store:
+
+{js file}
+```
+var usdToJod = 0.709;
+```
+
+Then:
+
+{js file}
+```
+function convertToSelectedCurrency(priceUSD) {
+  if (selectedCurrency === 'JOD') return priceUSD * usdToJod;
+  return priceUSD;
+}
+```
+
+So if a value is 100 USD and the user is on JOD:
+    100 × 0.709 = 70.9 JOD
+
+
+`formatPrice` then adds the symbol (`$` or `JD`) and rounds.
+
+***
+
+## [4. Total value for weight (calculator)] ##
+
+The calculator combines the above:
+
+{js file}
+```
+var pricePerGram = getPricePerGramByKarat(liveOzPriceUSD, karat);
+var totalUSD     = pricePerGram * weightGrams;
+var totalDisplay = convertToSelectedCurrency(totalUSD);
+```
+
+- Step 1: get price per gram for that karat.
+- Step 2: multiply by grams to get total USD.
+- Step 3: convert to JOD if needed.
+- Step 4: display total and per-gram both in the selected currency.
+
+So mathematically:
+    value = (ozPriceUSD/31.1035 × K/24) × weightGrams
