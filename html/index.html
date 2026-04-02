@@ -5,12 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GoldVault – Live Gold Price Tracker</title>
-  <link rel="icon" href="assets/images/gold_logo.png" type="image/x-icon">
+  <link rel="icon" href="../assets/images/gold_logo.png" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="cssFiles/style.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
@@ -24,13 +24,20 @@
       <span class="nav-title">GoldVault</span>
     </div>
     <ul class="nav-links">
+<<<<<<< HEAD:index.html
       <li><a href="index.html" class="active">Home</a></li>
       <li><a href="prices.html">Gold Prices</a></li>
       <li><a href="myAsset.html">My Assets</a></li>
+=======
+      <li><a href="../html/index.html" class="active">Home</a></li>
+      <li><a href="../html/prices.html">Gold Prices</a></li>
+      <li><a href="../html/myAssets.html">My Assets</a></li>
+>>>>>>> 6c152fbf0b4753cfc60956175e9efa50fdb57870:html/index.html
     </ul>
     <div class="nav-auth">
-      <a href="#" class="btn-ghost">Login</a>
-      <a href="#" class="btn-gold">Register</a>
+      <button id="loginBtn" type="button" class="btn-ghost">Login</button>
+      <button id="registerBtn" type="button" class="btn-gold">Register</button>
+      <button id="logoutBtn" type="button" class="btn-ghost" style="display: none;">Logout</button>
     </div>
     <button class="nav-toggle" id="navToggle">☰</button>
   </nav>
@@ -70,8 +77,13 @@
         </div>
 
         <div class="hero-cta">
+<<<<<<< HEAD:index.html
           <a href="prices.html" class="btn-gold-lg">View All Prices</a>
           <a href="myAsset.html" class="btn-outline-lg">Manage Assets →</a>
+=======
+          <a href="../html/prices.html" class="btn-gold-lg">View All Prices</a>
+          <a href="../html/myAssets.html" class="btn-outline-lg">Manage Assets →</a>
+>>>>>>> 6c152fbf0b4753cfc60956175e9efa50fdb57870:html/index.html
           <div class="cta-price-btn">
             <div class="currency-toggle">
               <button class="toggle-btn active" id="btnUSD" onclick="setCurrency('USD')">USD</button>
@@ -125,19 +137,19 @@
         <div class="rate-unit">per gram</div>
       </div>
       <div class="rate-card coin-card">
-        <img src="assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="coin-img" />
+        <img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="coin-img" />
         <div class="rate-karat">Rashadi</div>
         <div class="rate-price" id="rateRashadi">—</div>
         <div class="rate-unit">per lira</div>
       </div>
       <div class="rate-card coin-card">
-        <img src="assets/coins/english_coin.png" alt="English Coin" class="coin-img" />
+        <img src="../assets/coins/english_coin.png" alt="English Coin" class="coin-img" />
         <div class="rate-karat">English</div>
         <div class="rate-price" id="rateEnglish">—</div>
         <div class="rate-unit">per lira</div>
       </div>
       <div class="rate-card bar-card">
-        <img src="assets/bars/gold-bar.jpg" alt="Gold Bar" class="bar-img" />
+        <img src="../assets/bars/gold-bar.jpg" alt="Gold Bar" class="bar-img" />
         <div class="rate-karat">Gold Bar</div>
         <div class="rate-price" id="rateBar">—</div>
         <div class="rate-unit">1 kg bar</div>
@@ -165,19 +177,23 @@
       <p class="cta-sub">Add your jewelry, coins, and bars — see real-time profit & loss</p>
       <div class="asset-types">
         <div class="asset-type">
-          <div class="asset-icon"><img src="assets/images/gold-jewelry.png" alt="Jewelry"></div>
+          <div class="asset-icon"><img src="../assets/images/gold-jewelry.png" alt="Jewelry"></div>
           <span>Jewelry</span>
         </div>
         <div class="asset-type">
-          <div class="asset-icon"><img src="assets/coins/rashadi_coin.png" alt="Rashadi Coin"></div>
+          <div class="asset-icon"><img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin"></div>
           <span>Coins</span>
         </div>
         <div class="asset-type">
-          <div class="asset-icon"><img src="assets/bars/square_gold.png" alt="Gold Bar"></div>
+          <div class="asset-icon"><img src="../assets/bars/square_gold.png" alt="Gold Bar"></div>
           <span>Gold Bars</span>
         </div>
       </div>
+<<<<<<< HEAD:index.html
       <a href="myAsset.html" class="btn-gold-lg">Manage Your Assets →</a>
+=======
+      <a href="../html/myAssets.html" class="btn-gold-lg">Manage Your Assets →</a>
+>>>>>>> 6c152fbf0b4753cfc60956175e9efa50fdb57870:html/index.html
     </div>
   </section>
 
@@ -186,7 +202,7 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="jsFiles/app.js"></script>
+  <script src="../js/app.js"></script>
 </body>
 
 </html>

@@ -619,7 +619,7 @@ function renderFallbackNews() {
   ];
   var html = fallback.map(function(n) {
     return '<div class="news-card" style="cursor:default">' +
-      '<div class="news-img" style="display:flex;align-items:center;justify-content:center;font-size:2.5rem"><img src="assets/images/old-news.png" alt="News" class="news-img"></div>' +
+      '<div class="news-img" style="display:flex;align-items:center;justify-content:center;font-size:2.5rem"><img src="../assets/images/old-news.png" alt="News" class="news-img"></div>' +
       '<div class="news-body">' +
         '<div class="news-source">' + n.source + '</div>' +
         '<div class="news-headline">' + n.title + '</div>' +

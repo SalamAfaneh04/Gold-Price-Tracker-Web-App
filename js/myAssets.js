@@ -1,21 +1,26 @@
-const selectImg = document.getElementById('selectImg');
+const selectImg = document.getElementById('profilePic');
 
- function selectImg(){
-    const type = sessionStorage.getItem(active);
-    if (type == 'f'){
-        selectImg.src = '../images/female.png';
-    }else{
-        selectImg.src = '../images/male.png';
-    }
+function setProfileImage() {
+    const profilePic = document.getElementById('profilePic');
+    if (!profilePic){
+        return;
+    } 
+
+    const gender = sessionStorage.getItem('active') || 'f';
+    
+    profilePic.src = gender === 'm'
+        ? '../assets/images/male.png'
+        : '../assets/images/female.png';
 }
-
 
 // 1. to select date avalable
 document.addEventListener('DOMContentLoaded', () => {
+    setProfileImage();
+
     const datePicker = document.getElementById('purchaseDate');
     const today = new Date().toISOString().split('T')[0];
     datePicker.setAttribute('max', today);
-    datePicker.value = today; 
+    datePicker.value = today;
 });
 
 // 2. Control the catogory input in add asset form
@@ -39,21 +44,21 @@ function toggleFormFields() {
 function getAssetImage(type, category) {
     const imageMap = {
         'Jewelry': {
-            'Ring': 'assets/images/gold-jewelry.png', 
-            'Necklace': 'assets/images/necklace.png',
-            'Watch': 'assets/images/watch.png',
+            'Ring': '../assets/images/gold-jewelry.png',
+            'Necklace': '../assets/images/necklace.png',
+            'Watch': '../assets/images/watch.png',
         },
         'Coins': {
-            'Rashadi': 'assets/coins/rashadi_coin.png',
-            'English': 'assets/coins/english_coin.png',
+            'Rashadi': '../assets/coins/rashadi_coin.png',
+            'English': '../assets/coins/english_coin.png',
         },
-        'Bars': 'assets/bars/gold-bar.jpg' 
+        'Bars': '../assets/bars/gold-bar.jpg'
     };
 
     if (type === 'Jewelry') {
-        return imageMap.Jewelry[category] || 'assets/images/gold-jewelry.png';
+        return imageMap.Jewelry[category] || '../assets/images/gold-jewelry.png';
     } else if (type === 'Coins') {
-        return imageMap.Coins[category] || 'assets/coins/rashadi_coin.png';
+        return imageMap.Coins[category] || '../assets/coins/rashadi_coin.png';
     } else {
         return imageMap.Bars;
     }
