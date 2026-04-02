@@ -6,8 +6,14 @@
   <title>Gold Prices – GoldVault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/auth.css">
 </head>
+
 <body>
 <div class="sparkle-layer" id="sparkleLayer"></div>
 <div class="coin-burst" id="coinBurst"></div>
@@ -21,11 +27,14 @@
   <ul class="nav-links">
     <li><a href="../html/index.html">Home</a></li>
     <li><a href="../html/prices.html" class="active">Gold Prices</a></li>
-    <li><a href="../html/myAssets.html">My Assets</a></li>
+    <!-- ✅ id="assetsBtn" added so auth.js intercepts the click -->
+    <li><a href="../html/myAssets.html" id="assetsBtn">My Assets</a></li>
   </ul>
   <div class="nav-auth">
-    <a href="#" class="btn-ghost">Login</a>
-    <a href="#" class="btn-gold">Register</a>
+    <!-- ✅ Changed from <a> tags to <button> tags to match auth.js selectors -->
+    <button id="loginBtn" type="button" class="btn-ghost">Login</button>
+    <button id="registerBtn" type="button" class="btn-gold">Register</button>
+    <button id="logoutBtn" type="button" class="btn-ghost" style="display: none;">Logout</button>
   </div>
   <button class="nav-toggle" id="navToggle">☰</button>
 </nav>
@@ -40,23 +49,23 @@
 <!-- PAGE HEADER -->
 <section class="page-hero">
   <div class="page-hero-inner">
-  <div class="page-hero-content">
-    <p class="hero-eyebrow">Live Market Data</p>
-    <h1 class="page-title">Gold <em>Prices</em></h1>
-    <p class="page-sub">All prices calculated from live XAU ounce data</p>
-  </div>
-  <div class="page-live-badge">
-    <div class="live-badge">● LIVE</div>
-    <div class="page-ounce-price">
-      <span id="ozLabel">1 oz XAU =</span>
-      <strong id="ozPrice">—</strong>
+    <div class="page-hero-content">
+      <p class="hero-eyebrow">Live Market Data</p>
+      <h1 class="page-title">Gold <em>Prices</em></h1>
+      <p class="page-sub">All prices calculated from live XAU ounce data</p>
     </div>
-    <div class="page-time" id="pageTime">Fetching...</div>
-    <div class="currency-toggle" style="margin-top:12px">
-      <button class="toggle-btn active" id="btnUSD2" onclick="setCurrency('USD')">USD</button>
-      <button class="toggle-btn" id="btnJOD2" onclick="setCurrency('JOD')">JOD</button>
+    <div class="page-live-badge">
+      <div class="live-badge">● LIVE</div>
+      <div class="page-ounce-price">
+        <span id="ozLabel">1 oz XAU =</span>
+        <strong id="ozPrice">—</strong>
+      </div>
+      <div class="page-time" id="pageTime">Fetching...</div>
+      <div class="currency-toggle" style="margin-top:12px">
+        <button class="toggle-btn active" id="btnUSD2" onclick="setCurrency('USD')">USD</button>
+        <button class="toggle-btn" id="btnJOD2" onclick="setCurrency('JOD')">JOD</button>
+      </div>
     </div>
-  </div>
   </div>
 </section>
 
@@ -165,7 +174,8 @@
 
         <div class="coin-detail-card">
           <div class="coin-img-wrap">
-            <img src="--/assets/coins/rashadi_coin.png" alt="Rashadi Lira" class="coin-detail-img"/>
+            <!-- ✅ Fixed broken path: was "--/assets/..." now "../assets/..." -->
+            <img src="../assets/coins/rashadi_coin.png" alt="Rashadi Lira" class="coin-detail-img"/>
             <div class="coin-glow"></div>
           </div>
           <div class="coin-info">
@@ -268,7 +278,117 @@
   <p>© 2026 GoldVault · Prices update every 60 seconds from live XAU data</p>
 </footer>
 
+<!-- ✅ AUTH MODALS — same block as index.html -->
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="d-flex justify-content-end p-2">
+        <button type="button" class="btn-close xBtn"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="text-center">
+          <h1 class="h2">Sign in</h1>
+          <p class="text-muted">Sign in below to access your account</p>
+        </div>
+        <form class="mt-4" id="loginForm">
+          <div class="mb-2">
+            <label class="form-label text-muted mb-1">Email Address</label>
+            <input type="text" class="form-control" id="loginEmail" name="loginEmail" placeholder="Enter your email">
+            <span class="error-span" id="error-loginEmail"></span>
+          </div>
+          <div class="mb-4">
+            <label class="form-label text-muted mb-1">Password</label>
+            <input type="password" class="form-control" id="loginPassword" name="loginPassword" placeholder="Enter your password">
+            <span class="error-span" id="error-loginPassword"></span>
+          </div>
+          <div class="d-grid mb-4">
+            <button type="submit" class="btn-custom">Sign in</button>
+          </div>
+          <hr>
+          <p class="text-center text-muted mt-3">
+            Don't have an account yet?
+            <button id="redirectToSignUp" type="button" class="link-btn">Sign up</button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="d-flex justify-content-end p-2">
+        <button type="button" class="btn-close xBtn"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="text-center">
+          <h1 class="h2">Sign up</h1>
+          <p class="text-muted">Create an account to get started</p>
+        </div>
+        <form class="mt-4" id="registerForm">
+          <div class="mb-3">
+            <label class="form-label text-muted mb-1">First Name</label>
+            <input type="text" class="form-control" id="fName" name="fName" placeholder="Enter your first name">
+            <span class="error-span" id="error-fName"></span>
+          </div>
+          <div class="mb-3">
+            <label class="form-label text-muted mb-1">Last Name</label>
+            <input type="text" class="form-control" id="lName" name="lName" placeholder="Enter your last name">
+            <span class="error-span" id="error-lName"></span>
+          </div>
+          <div class="mb-1">
+            <label class="form-label text-muted mb-1">Email Address</label>
+            <input type="text" class="form-control" id="registerEmail" name="email" placeholder="Enter your email address">
+            <span class="hint-span" id="error-registerEmail"></span>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control" id="confirmEmail" name="confirmEmail" placeholder="Confirm Email">
+            <span class="error-span" id="error-confirmEmail"></span>
+          </div>
+          <div class="mb-3">
+            <label class="form-label text-muted mb-1">Gender</label>
+            <select id="gender" name="gender" class="form-select">
+              <option value="" disabled selected hidden>Select Gender</option>
+              <option value="m">Male</option>
+              <option value="f">Female</option>
+            </select>
+            <span class="error-span" id="error-gender"></span>
+          </div>
+          <div class="mb-1">
+            <label class="form-label text-muted mb-1">Password</label>
+            <input type="password" class="form-control" id="registerPassword" name="password" placeholder="Enter your password">
+            <span class="hint-span" id="error-registerPassword"></span>
+          </div>
+          <div class="mb-4">
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+            <span class="error-span" id="error-confirmPassword"></span>
+          </div>
+          <div class="d-grid mb-4">
+            <button type="submit" class="btn-custom">Sign up</button>
+          </div>
+          <hr>
+          <p class="text-center text-muted mt-3">
+            Already have an account?
+            <button id="redirectToSignIn" type="button" class="link-btn">Sign in</button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Scripts in correct order -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/src/sha256.min.js"></script>
+<script src="../js/auth.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="../js/app.js"></script>
+
 </body>
 </html>

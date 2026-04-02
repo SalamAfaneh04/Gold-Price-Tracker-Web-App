@@ -2,192 +2,315 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GoldVault – Live Gold Price Tracker</title>
-  <link rel="icon" href="../assets/images/gold_logo.png" type="image/x-icon">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GoldVault – Live Gold Price Tracker</title>
+    <link rel="icon" href="../assets/images/gold_logo.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
 </head>
 
 <body>
-  <div class="sparkle-layer" id="sparkleLayer"></div>
-  <div class="coin-burst" id="coinBurst"></div>
+    <div class="sparkle-layer" id="sparkleLayer"></div>
+    <div class="coin-burst" id="coinBurst"></div>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="nav-brand">
-      <span class="nav-icon">⬡</span>
-      <span class="nav-title">GoldVault</span>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">⬡</span>
+            <span class="nav-title">GoldVault</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="../html/index.html" class="active">Home</a></li>
+            <li><a href="../html/prices.html">Gold Prices</a></li>
+            <li><a href="../html/myAssets.html" id="assetsBtn">My Assets</a></li>
+        </ul>
+        <div class="nav-auth">
+            <button id="loginBtn" type="button" class="btn-ghost">Login</button>
+            <button id="registerBtn" type="button" class="btn-gold">Register</button>
+            <button id="logoutBtn" type="button" class="btn-ghost" style="display: none;">Logout</button>
+        </div>
+        <button class="nav-toggle" id="navToggle">☰</button>
+    </nav>
+
+    <!-- TICKER -->
+    <div class="ticker-bar">
+        <div class="ticker-track" id="tickerTrack">
+            <span class="ticker-item">🔴 Loading live prices...</span>
+        </div>
     </div>
-    <ul class="nav-links">
-      <li><a href="../html/index.html" class="active">Home</a></li>
-      <li><a href="../html/prices.html">Gold Prices</a></li>
-      <li><a href="../html/myAssets.html">My Assets</a></li>
-    </ul>
-    <div class="nav-auth">
-      <button id="loginBtn" type="button" class="btn-ghost">Login</button>
-      <button id="registerBtn" type="button" class="btn-gold">Register</button>
-      <button id="logoutBtn" type="button" class="btn-ghost" style="display: none;">Logout</button>
-    </div>
-    <button class="nav-toggle" id="navToggle">☰</button>
-  </nav>
 
-  <!-- TICKER -->
-  <div class="ticker-bar">
-    <div class="ticker-track" id="tickerTrack">
-      <span class="ticker-item">🔴 Loading live prices...</span>
-    </div>
-  </div>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg-text">GOLD</div>
+        <div class="hero-content">
+            <div class="hero-left">
+                <p class="hero-eyebrow">Live Market Data</p>
+                <h1 class="hero-title">Track Gold.<br><em>Grow Wealth.</em></h1>
+                <p class="hero-sub">Real-time XAU prices, portfolio tracking, and profit insights — all in one place.
+                </p>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-bg-text">GOLD</div>
-    <div class="hero-content">
-      <div class="hero-left">
-        <p class="hero-eyebrow">Live Market Data</p>
-        <h1 class="hero-title">Track Gold.<br><em>Grow Wealth.</em></h1>
-        <p class="hero-sub">Real-time XAU prices, portfolio tracking, and profit insights — all in one place.</p>
+                <div class="live-price-card" id="livePriceCard">
+                    <div class="live-badge">● LIVE</div>
+                    <div class="price-row">
+                        <div class="price-block">
+                            <span class="price-label">USD / oz</span>
+                            <span class="price-value" id="priceUSD">—</span>
+                        </div>
+                        <div class="price-divider"></div>
+                        <div class="price-block">
+                            <span class="price-label">JOD / oz</span>
+                            <span class="price-value" id="priceJOD">—</span>
+                        </div>
+                    </div>
+                    <div class="price-meta">
+                        <span id="priceTime">Fetching...</span>
+                    </div>
+                </div>
 
-        <div class="live-price-card" id="livePriceCard">
-          <div class="live-badge">● LIVE</div>
-          <div class="price-row">
-            <div class="price-block">
-              <span class="price-label">USD / oz</span>
-              <span class="price-value" id="priceUSD">—</span>
+                <div class="hero-cta">
+                    <a href="../html/prices.html" class="btn-gold-lg">View All Prices</a>
+                    <a href="../html/myAssets.html" class="btn-outline-lg">Manage Assets →</a>
+                    <div class="cta-price-btn">
+                        <div class="currency-toggle">
+                            <button class="toggle-btn active" id="btnUSD" onclick="setCurrency('USD')">USD</button>
+                            <button class="toggle-btn" id="btnJOD" onclick="setCurrency('JOD')">JOD</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="price-divider"></div>
-            <div class="price-block">
-              <span class="price-label">JOD / oz</span>
-              <span class="price-value" id="priceJOD">—</span>
+
+            <div class="hero-right">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <span class="chart-title">Price Chart <span class="chart-sub">Last 30 days</span></span>
+                        <div class="chart-currency-toggle">
+                            <button class="ctoggle active" onclick="toggleChart('USD',this)">USD</button>
+                            <button class="ctoggle" onclick="toggleChart('JOD',this)">JOD</button>
+                        </div>
+                    </div>
+                    <div class="chart-controls">
+                        <span class="chart-date-label">From</span>
+                        <input type="date" id="chartDateFrom" class="chart-date-input" onchange="filterChartByDate()" />
+                        <span class="chart-date-label">To</span>
+                        <input type="date" id="chartDateTo" class="chart-date-input" onchange="filterChartByDate()" />
+                        <button class="toggle-btn" onclick="resetChartFilter()"
+                            style="border:1.5px solid var(--border);border-radius:8px;font-size:0.72rem;padding:4px 10px">Reset</button>
+                    </div>
+                    <canvas id="priceChart" height="220"></canvas>
+                </div>
             </div>
-          </div>
-          <div class="price-meta">
-            <span id="priceTime">Fetching...</span>
-          </div>
         </div>
+    </section>
 
-        <div class="hero-cta">
-          <a href="../html/prices.html" class="btn-gold-lg">View All Prices</a>
-          <a href="../html/myAssets.html" class="btn-outline-lg">Manage Assets →</a>
-          <div class="cta-price-btn">
-            <div class="currency-toggle">
-              <button class="toggle-btn active" id="btnUSD" onclick="setCurrency('USD')">USD</button>
-              <button class="toggle-btn" id="btnJOD" onclick="setCurrency('JOD')">JOD</button>
+    <!-- GOLD RATES STRIP -->
+    <section class="rates-strip">
+        <div class="rates-grid">
+            <div class="rate-card karat24">
+                <div class="rate-karat">24K</div>
+                <div class="rate-name">Pure Gold</div>
+                <div class="rate-price" id="rate24">—</div>
+                <div class="rate-unit">per gram</div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="chart-card">
-          <div class="chart-header">
-            <span class="chart-title">Price Chart <span class="chart-sub">Last 30 days</span></span>
-            <div class="chart-currency-toggle">
-              <button class="ctoggle active" onclick="toggleChart('USD',this)">USD</button>
-              <button class="ctoggle" onclick="toggleChart('JOD',this)">JOD</button>
+            <div class="rate-card karat21">
+                <div class="rate-karat">21K</div>
+                <div class="rate-name">Premium</div>
+                <div class="rate-price" id="rate21">—</div>
+                <div class="rate-unit">per gram</div>
             </div>
-          </div>
-          <div class="chart-controls">
-            <span class="chart-date-label">From</span>
-            <input type="date" id="chartDateFrom" class="chart-date-input" onchange="filterChartByDate()"/>
-            <span class="chart-date-label">To</span>
-            <input type="date" id="chartDateTo" class="chart-date-input" onchange="filterChartByDate()"/>
-            <button class="toggle-btn" onclick="resetChartFilter()" style="border:1.5px solid var(--border);border-radius:8px;font-size:0.72rem;padding:4px 10px">Reset</button>
-          </div>
-          <canvas id="priceChart" height="220"></canvas>
+            <div class="rate-card karat18">
+                <div class="rate-karat">18K</div>
+                <div class="rate-name">Standard</div>
+                <div class="rate-price" id="rate18">—</div>
+                <div class="rate-unit">per gram</div>
+            </div>
+            <div class="rate-card coin-card">
+                <img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="coin-img" />
+                <div class="rate-karat">Rashadi</div>
+                <div class="rate-price" id="rateRashadi">—</div>
+                <div class="rate-unit">per lira</div>
+            </div>
+            <div class="rate-card coin-card">
+                <img src="../assets/coins/english_coin.png" alt="English Coin" class="coin-img" />
+                <div class="rate-karat">English</div>
+                <div class="rate-price" id="rateEnglish">—</div>
+                <div class="rate-unit">per lira</div>
+            </div>
+            <div class="rate-card bar-card">
+                <img src="../assets/bars/gold-bar.jpg" alt="Gold Bar" class="bar-img" />
+                <div class="rate-karat">Gold Bar</div>
+                <div class="rate-price" id="rateBar">—</div>
+                <div class="rate-unit">1 kg bar</div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- GOLD RATES STRIP -->
-  <section class="rates-strip">
-    <div class="rates-grid">
-      <div class="rate-card karat24">
-        <div class="rate-karat">24K</div>
-        <div class="rate-name">Pure Gold</div>
-        <div class="rate-price" id="rate24">—</div>
-        <div class="rate-unit">per gram</div>
-      </div>
-      <div class="rate-card karat21">
-        <div class="rate-karat">21K</div>
-        <div class="rate-name">Premium</div>
-        <div class="rate-price" id="rate21">—</div>
-        <div class="rate-unit">per gram</div>
-      </div>
-      <div class="rate-card karat18">
-        <div class="rate-karat">18K</div>
-        <div class="rate-name">Standard</div>
-        <div class="rate-price" id="rate18">—</div>
-        <div class="rate-unit">per gram</div>
-      </div>
-      <div class="rate-card coin-card">
-        <img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="coin-img" />
-        <div class="rate-karat">Rashadi</div>
-        <div class="rate-price" id="rateRashadi">—</div>
-        <div class="rate-unit">per lira</div>
-      </div>
-      <div class="rate-card coin-card">
-        <img src="../assets/coins/english_coin.png" alt="English Coin" class="coin-img" />
-        <div class="rate-karat">English</div>
-        <div class="rate-price" id="rateEnglish">—</div>
-        <div class="rate-unit">per lira</div>
-      </div>
-      <div class="rate-card bar-card">
-        <img src="../assets/bars/gold-bar.jpg" alt="Gold Bar" class="bar-img" />
-        <div class="rate-karat">Gold Bar</div>
-        <div class="rate-price" id="rateBar">—</div>
-        <div class="rate-unit">1 kg bar</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NEWS SECTION -->
-  <section class="news-section">
-    <div class="section-header">
-      <h2 class="section-title">Market <em>Insights</em></h2>
-      <p class="section-sub">Latest gold market news</p>
-    </div>
-    <div class="news-grid" id="newsGrid">
-      <div class="news-skeleton"></div>
-      <div class="news-skeleton"></div>
-      <div class="news-skeleton"></div>
-    </div>
-  </section>
-
-  <!-- ADD ASSETS -->
-  <section class="cta-section">
-    <div class="cta-inner">
-      <h2 class="cta-title">Track Your Gold Assets</h2>
-      <p class="cta-sub">Add your jewelry, coins, and bars — see real-time profit & loss</p>
-      <div class="asset-types">
-        <div class="asset-type">
-          <div class="asset-icon"><img src="../assets/images/gold-jewelry.png" alt="Jewelry"></div>
-          <span>Jewelry</span>
+    <!-- NEWS SECTION -->
+    <section class="news-section">
+        <div class="section-header">
+            <h2 class="section-title">Market <em>Insights</em></h2>
+            <p class="section-sub">Latest gold market news</p>
         </div>
-        <div class="asset-type">
-          <div class="asset-icon"><img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin"></div>
-          <span>Coins</span>
+        <div class="news-grid" id="newsGrid">
+            <div class="news-skeleton"></div>
+            <div class="news-skeleton"></div>
+            <div class="news-skeleton"></div>
         </div>
-        <div class="asset-type">
-          <div class="asset-icon"><img src="../assets/bars/square_gold.png" alt="Gold Bar"></div>
-          <span>Gold Bars</span>
+    </section>
+
+    <!-- ADD ASSETS -->
+    <section class="cta-section">
+        <div class="cta-inner">
+            <h2 class="cta-title">Track Your Gold Assets</h2>
+            <p class="cta-sub">Add your jewelry, coins, and bars — see real-time profit & loss</p>
+            <div class="asset-types">
+                <div class="asset-type">
+                    <div class="asset-icon"><img src="../assets/images/gold-jewelry.png" alt="Jewelry"></div>
+                    <span>Jewelry</span>
+                </div>
+                <div class="asset-type">
+                    <div class="asset-icon"><img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin"></div>
+                    <span>Coins</span>
+                </div>
+                <div class="asset-type">
+                    <div class="asset-icon"><img src="../assets/bars/square_gold.png" alt="Gold Bar"></div>
+                    <span>Gold Bars</span>
+                </div>
+            </div>
+            <a href="../html/myAssets.html" class="btn-gold-lg">Manage Your Assets →</a>
         </div>
-      </div>
-      <a href="../html/myAssets.html" class="btn-gold-lg">Manage Your Assets →</a>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 GoldVault · Built with real XAU data</p>
+    </footer>
+
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="d-flex justify-content-end p-2">
+                    <button type="button" class="btn-close xBtn"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <h1 class="h2">Sign in</h1>
+                        <p class="text-muted">Sign in below to access your account</p>
+                    </div>
+                    <form class="mt-4" id="loginForm">
+                        <div class="mb-2">
+                            <label class="form-label text-muted mb-1">Email Address</label>
+                            <input type="text" class="form-control" id="loginEmail" name="loginEmail"
+                                placeholder="Enter your email">
+                            <span class="error-span" id="error-loginEmail"></span>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted mb-1">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" name="loginPassword"
+                                placeholder="Enter your password">
+                            <span class="error-span" id="error-loginPassword"></span>
+                        </div>
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn-custom">Sign in</button>
+                        </div>
+                        <hr>
+                        <p class="text-center text-muted mt-3">
+                            Don't have an account yet?
+                            <button id="redirectToSignUp" type="button" class="link-btn">Sign up</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <footer class="footer">
-    <p>© 2026 GoldVault · Built with real XAU data</p>
-  </footer>
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="d-flex justify-content-end p-2">
+                    <button type="button" class="btn-close xBtn"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <h1 class="h2">Sign up</h1>
+                        <p class="text-muted">Create an account to get started</p>
+                    </div>
+                    <form class="mt-4" id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label text-muted mb-1">First Name</label>
+                            <input type="text" class="form-control" id="fName" name="fName"
+                                placeholder="Enter your first name">
+                            <span class="error-span" id="error-fName"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted mb-1">Last Name</label>
+                            <input type="text" class="form-control" id="lName" name="lName"
+                                placeholder="Enter your last name">
+                            <span class="error-span" id="error-lName"></span>
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label text-muted mb-1">Email Address</label>
+                            <input type="text" class="form-control" id="registerEmail" name="email"
+                                placeholder="Enter your email address">
+                            <span class="hint-span" id="error-registerEmail"></span>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="confirmEmail" name="confirmEmail"
+                                placeholder="Confirm Email">
+                            <span class="error-span" id="error-confirmEmail"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted mb-1">Gender</label>
+                            <select id="gender" name="gender" class="form-select">
+                                <option value="" disabled selected hidden>Select Gender</option>
+                                <option value="m">Male</option>
+                                <option value="f">Female</option>
+                            </select>
+                            <span class="error-span" id="error-gender"></span>
+                        </div>
+                        <div class="mb-1">
+                            <label class="form-label text-muted mb-1">Password</label>
+                            <input type="password" class="form-control" id="registerPassword" name="password"
+                                placeholder="Enter your password">
+                            <span class="hint-span" id="error-registerPassword"></span>
+                        </div>
+                        <div class="mb-4">
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                placeholder="Confirm Password">
+                            <span class="error-span" id="error-confirmPassword"></span>
+                        </div>
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn-custom">Sign up</button>
+                        </div>
+                        <hr>
+                        <p class="text-center text-muted mt-3">
+                            Already have an account?
+                            <button id="redirectToSignIn" type="button" class="link-btn">Sign in</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="../js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/src/sha256.min.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../js/app.js"></script>
+
 </body>
 
 </html>

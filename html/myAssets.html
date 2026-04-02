@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoldVault – My Physical Assets Vault</title>
     <link rel="icon" href="../assets/images/gold_logo.png" type="image/x-icon">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
+
     <link rel="stylesheet" href="../css/style.css">
 
     <link rel="stylesheet" href="../css/myAssets.css">
 </head>
+
 <body>
 
     <nav class="navbar sticky-top">
@@ -27,25 +31,30 @@
             <li><a href="../html/prices.html">Gold Prices</a></li>
             <li><a href="../html/myAssets.html" class="active">My Assets</a></li>
         </ul>
-        
+
         <div class="dropdown ms-4">
-            <a href="#" class="nav-profile-link dropdown-toggle" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <a href="#" class="nav-profile-link dropdown-toggle" id="userMenu" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 <span class="user-name-label">Salam Ata</span>
-                <img id="profilePic" src="../assets/images/female.png" alt="Profile" width="36" height="36" class="rounded-circle" style="border: 2px solid var(--gold);">
+                <img id="profilePic" src="../assets/images/female.png" alt="Profile" width="36" height="36"
+                    class="rounded-circle" style="border: 2px solid var(--gold);">
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userMenu">
                 <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>My Profile</a></li>
                 <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item text-danger" href="../html/index.html"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item text-danger" href="../html/index.html"><i
+                            class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
             </ul>
         </div>
         <button class="nav-toggle" id="navToggle">☰</button>
-        
+
     </nav>
 
     <main class="container-fluid px-lg-5 py-5">
-        
+
         <header class="mb-5">
             <div class="row align-items-end mb-4 g-3">
                 <div class="col-md-8">
@@ -68,7 +77,7 @@
 
             <section class="rates-strip">
                 <div class="rates-grid" id="portfolioSummaryGrid">
-                    
+
                     <div class="rate-card karat24">
                         <div class="rate-karat">24K Holdings</div>
                         <div class="rate-name">Pure Gold Total</div>
@@ -120,7 +129,8 @@
                 <div class="col-md-4">
                     <label class="form-label">Search</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <span class="input-group-text bg-white border-end-0"><i
+                                class="bi bi-search text-muted"></i></span>
                         <input type="text" class="form-control border-start-0" placeholder="by name, type, karat...">
                     </div>
                 </div>
@@ -147,13 +157,14 @@
 
         <h4 class="serif mb-4">Asset <em>Details</em></h4>
         <section class="row g-4" id="assetInventoryGrid">
-            
+
             <div class="col-md-4 col-lg-3">
                 <article class="asset-item-card position-relative">
                     <span class="profit-indicator bg-profit">+5.2%</span>
                     <div class="asset-card-image-wrapper">
-                        <img src="../assets/images/gold-jewelry.png" alt="Gold Ring" class="asset-card-image"> </div>
-                    
+                        <img src="../assets/images/gold-jewelry.png" alt="Gold Ring" class="asset-card-image">
+                    </div>
+
                     <div class="asset-card-body">
                         <div class="mb-2">
                             <span class="badge rounded-pill bg-light text-dark border">Ring | 21K</span>
@@ -161,7 +172,7 @@
                         <h6 class="fw-bold mb-1">Engagement Gold Ring</h6>
                         <p class="text-muted small mb-0">Weight: 4.50g | Purchased: 2026-02-14</p>
                         <p class="text-muted small mb-3">Buy Price: 210 JOD</p>
-                        
+
                         <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                             <span class="text-muted small">Current Value:</span>
                             <span class="fw-bold text-dark fs-5">220.90 JOD</span>
@@ -171,11 +182,13 @@
             </div>
 
             <div class="col-md-4 col-lg-3">
-                <article class="asset-item-card position-relative" style="border-left: 4px solid var(--loss-red) !important;">
+                <article class="asset-item-card position-relative"
+                    style="border-left: 4px solid var(--loss-red) !important;">
                     <span class="profit-indicator bg-loss">-0.8%</span>
                     <div class="asset-card-image-wrapper">
-                        <img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="asset-card-image"> </div>
-                    
+                        <img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="asset-card-image">
+                    </div>
+
                     <div class="asset-card-body">
                         <div class="mb-2">
                             <span class="badge rounded-pill bg-light text-dark border">Coin | Rashadi</span>
@@ -183,7 +196,7 @@
                         <h6 class="fw-bold mb-1">Rashadi Gold Lira</h6>
                         <p class="text-muted small mb-0">Weight: 7.20g | Purchased: 2026-03-01</p>
                         <p class="text-muted small mb-3">Buy Price: 410 JOD</p>
-                        
+
                         <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                             <span class="text-muted small">Current Value:</span>
                             <span class="fw-bold text-danger fs-5">406.70 JOD</span>
@@ -191,13 +204,14 @@
                     </div>
                 </article>
             </div>
-            
-             <div class="col-md-4 col-lg-3">
+
+            <div class="col-md-4 col-lg-3">
                 <article class="asset-item-card position-relative">
                     <span class="profit-indicator bg-profit">+3.1%</span>
                     <div class="asset-card-image-wrapper">
-                        <img src="../assets/bars/gold-bar.jpg" alt="Gold Bar" class="asset-card-image"> </div>
-                    
+                        <img src="../assets/bars/gold-bar.jpg" alt="Gold Bar" class="asset-card-image">
+                    </div>
+
                     <div class="asset-card-body">
                         <div class="mb-2">
                             <span class="badge rounded-pill bg-light text-dark border">Bar | 24K</span>
@@ -205,7 +219,7 @@
                         <h6 class="fw-bold mb-1">PAMP Suisse 10g Bar</h6>
                         <p class="text-muted small mb-0">Weight: 10.00g | Purchased: 2026-01-10</p>
                         <p class="text-muted small mb-3">Buy Price: 780 JOD</p>
-                        
+
                         <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                             <span class="text-muted small">Current Value:</span>
                             <span class="fw-bold text-dark fs-5">804.20 JOD</span>
@@ -213,7 +227,7 @@
                     </div>
                 </article>
             </div>
-            
+
         </section>
     </main>
 
@@ -303,5 +317,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/myAssets.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        function isLoggedIn() {
+            return sessionStorage.getItem("currentUser") !== null;
+        }
+        function requireAuth() {
+            if (!isLoggedIn()) {
+                window.location.href = '../html/index.html';
+            }
+        }
+        requireAuth();
+    </script>
 </body>
+
 </html>
