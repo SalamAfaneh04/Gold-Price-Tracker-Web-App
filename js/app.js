@@ -225,7 +225,7 @@ function buildBarTable(oz) {
   tbody.innerHTML = rows.join('');
 }
 
-// ---- TICKER ----------------------------------------------------------------------------------------------------------------
+// ---- TICKER (the track moving line)----------------------------------------------------------------------------------------------------------------
 function buildTicker(oz, g24, g21, g18, rashadi, english) {
   var items = [
     'XAU/USD: ' + formatOz(oz),
