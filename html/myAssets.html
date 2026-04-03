@@ -15,22 +15,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/auth.css">
+
     <link rel="stylesheet" href="../css/myAssets.css">
 
-    <!-- Guard runs immediately in <head> before page renders -->
-    <script>
-        (function () {
-            try {
-                const user = sessionStorage.getItem("currentUser");
-                if (!user || !JSON.parse(user).isLoggedIn) {
-                    window.location.href = '../html/index.html';
-                }
-            } catch (e) {
-                window.location.href = '../html/index.html';
-            }
-        })();
-    </script>
+    <link rel="stylesheet" href="../css/auth.css">
 </head>
 
 <body>
@@ -49,25 +37,29 @@
         <div class="dropdown ms-4">
             <a href="#" class="nav-profile-link dropdown-toggle" id="userMenu" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <span class="user-name-label" id="navUserName">User</span>
+                <span class="user-name-label fullName">Salam Ata</span>
                 <img id="profilePic" src="../assets/images/female.png" alt="Profile" width="36" height="36"
                     class="rounded-circle" style="border: 2px solid var(--gold);">
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="userMenu">
-                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal"><i class="bi bi-person me-2"></i>My Profile</a></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>My Profile</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li>
-                    <a class="dropdown-item text-danger" href="#" id="signOutBtn">
-                        <i class="bi bi-box-arrow-right me-2"></i>Sign Out
-                    </a>
-                </li>
+                <li><a class="dropdown-item text-danger" href="../html/index.html"><i
+                            class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
             </ul>
         </div>
         <button class="nav-toggle" id="navToggle">☰</button>
+
     </nav>
+
+    <!-- TICKER -->
+    <div class="ticker-bar">
+        <div class="ticker-track" id="tickerTrack">
+            <span class="ticker-item">🔴 Loading live prices...</span>
+        </div>
+    </div>
 
     <main class="container-fluid px-lg-5 py-5">
 
@@ -75,61 +67,64 @@
             <div class="row align-items-end mb-4 g-3">
                 <div class="col-md-8">
                     <p class="hero-eyebrow">Portfolio Manager</p>
-                    <h1 class="serif display-4 fw-bold"><span id="headerUserName">Your</span> Gold <em>Overview</em>
-                    </h1>
+                    <h1 class="serif display-4 fw-bold">Salam's Gold <em>Overview</em></h1>
                 </div>
                 <div class="col-md-4 text-md-end">
                     <button class="btn-gold-lg" data-bs-toggle="modal" data-bs-target="#addAssetModal">
                         <i class="bi bi-plus-lg me-2"></i>Secure New Asset
                     </button>
                 </div>
-                <div class="currency-switch-container d-inline-flex align-items-center me-3">
-                    <div class="currency-toggle" id="currencyToggle">
-                        <div class="toggle-bg"></div>
-                        <button type="button" class="btn-toggle active" data-currency="JOD">JOD</button>
-                        <button type="button" class="btn-toggle" data-currency="USD">USD</button>
-                    </div>
+                <div class="chart-currency-toggle">
+                    <button class="ctoggle active" id="btnUSD" onclick="setCurrency('USD')">USD</button>
+                    <button class="ctoggle" id="btnJOD" onclick="setCurrency('JOD')">JOD</button>
                 </div>
             </div>
 
             <section class="rates-strip">
                 <div class="rates-grid" id="portfolioSummaryGrid">
+
                     <div class="rate-card karat24">
                         <div class="rate-karat">24K Holdings</div>
                         <div class="rate-name">Pure Gold Total</div>
                         <div class="rate-price" id="totalValue24">0.00 JOD</div>
                         <div class="rate-unit">Total Value</div>
                     </div>
+
                     <div class="rate-card karat21">
                         <div class="rate-karat">21K Holdings</div>
                         <div class="rate-name">Premium Total</div>
                         <div class="rate-price" id="totalValue21">0.00 JOD</div>
                         <div class="rate-unit">Total Value</div>
                     </div>
+
                     <div class="rate-card karat18">
                         <div class="rate-karat">18K Holdings</div>
                         <div class="rate-name">Standard Total</div>
                         <div class="rate-price" id="totalValue18">0.00 JOD</div>
                         <div class="rate-unit">Total Value</div>
                     </div>
+
                     <div class="rate-card coin-card">
                         <img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="coin-img" />
                         <div class="rate-karat">Rashadi</div>
                         <div class="rate-price" id="totalValueRashadi">0.00 JOD</div>
                         <div class="rate-unit" id="countRashadi">0 Coins Owned</div>
                     </div>
+
                     <div class="rate-card coin-card">
                         <img src="../assets/coins/english_coin.png" alt="English Coin" class="coin-img" />
                         <div class="rate-karat">English</div>
                         <div class="rate-price" id="totalValueEnglish">0.00 JOD</div>
                         <div class="rate-unit" id="countEnglish">0 Coins Owned</div>
                     </div>
+
                     <div class="rate-card bar-card">
                         <img src="../assets/bars/gold-bar.jpg" alt="Gold Bar" class="bar-img" />
                         <div class="rate-karat">Gold Bars</div>
                         <div class="rate-price" id="totalValueBars">0.00 JOD</div>
                         <div class="rate-unit" id="countBars">Total Value</div>
                     </div>
+
                 </div>
             </section>
         </header>
@@ -139,14 +134,14 @@
                 <div class="col-md-4">
                     <label class="form-label">Search</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="bi bi-search text-muted"></i>
-                        </span>
+                        <span class="input-group-text bg-white border-end-0"><i
+                                class="bi bi-search text-muted"></i></span>
                         <input type="text" class="form-control border-start-0" placeholder="by name, type, karat...">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Filter by Type</label>
+                    <!-- Filter by Type -->
                     <select class="form-select">
                         <option value="all">All Types</option>
                         <option value="Jewelry">Jewelry</option>
@@ -156,6 +151,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Filter by Karat</label>
+                    <!-- Filter by Karat -->
                     <select class="form-select">
                         <option value="all">All Karats</option>
                         <option value="24K">24K (Pure)</option>
@@ -175,6 +171,7 @@
                     <div class="asset-card-image-wrapper">
                         <img src="../assets/images/gold-jewelry.png" alt="Gold Ring" class="asset-card-image">
                     </div>
+
                     <div class="asset-card-body">
                         <div class="mb-2">
                             <span class="badge rounded-pill bg-light text-dark border">Ring | 21K</span>
@@ -182,6 +179,7 @@
                         <h6 class="fw-bold mb-1">Engagement Gold Ring</h6>
                         <p class="text-muted small mb-0">Weight: 4.50g | Purchased: 2026-02-14</p>
                         <p class="text-muted small mb-3">Buy Price: 210 JOD</p>
+
                         <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                             <span class="text-muted small">Current Value:</span>
                             <span class="fw-bold text-dark fs-5">220.90 JOD</span>
@@ -197,6 +195,7 @@
                     <div class="asset-card-image-wrapper">
                         <img src="../assets/coins/rashadi_coin.png" alt="Rashadi Coin" class="asset-card-image">
                     </div>
+
                     <div class="asset-card-body">
                         <div class="mb-2">
                             <span class="badge rounded-pill bg-light text-dark border">Coin | Rashadi</span>
@@ -204,6 +203,7 @@
                         <h6 class="fw-bold mb-1">Rashadi Gold Lira</h6>
                         <p class="text-muted small mb-0">Weight: 7.20g | Purchased: 2026-03-01</p>
                         <p class="text-muted small mb-3">Buy Price: 410 JOD</p>
+
                         <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                             <span class="text-muted small">Current Value:</span>
                             <span class="fw-bold text-danger fs-5">406.70 JOD</span>
@@ -218,6 +218,7 @@
                     <div class="asset-card-image-wrapper">
                         <img src="../assets/bars/gold-bar.jpg" alt="Gold Bar" class="asset-card-image">
                     </div>
+
                     <div class="asset-card-body">
                         <div class="mb-2">
                             <span class="badge rounded-pill bg-light text-dark border">Bar | 24K</span>
@@ -225,6 +226,7 @@
                         <h6 class="fw-bold mb-1">PAMP Suisse 10g Bar</h6>
                         <p class="text-muted small mb-0">Weight: 10.00g | Purchased: 2026-01-10</p>
                         <p class="text-muted small mb-3">Buy Price: 780 JOD</p>
+
                         <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                             <span class="text-muted small">Current Value:</span>
                             <span class="fw-bold text-dark fs-5">804.20 JOD</span>
@@ -236,7 +238,6 @@
         </section>
     </main>
 
-    <!-- ADD ASSET MODAL -->
     <div class="modal fade" id="addAssetModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow-lg">
@@ -248,13 +249,14 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label">Type</label>
-                            <select class="form-select" id="typeSelect" onchange="toggleFormFields()" required>
+                            <select class="form-select" id="typeSelect" onchange="toggleFormFields()"  required>
                                 <option value="" selected disabled>Select Type...</option>
                                 <option value="Jewelry">Jewelry</option>
                                 <option value="Bars">Bars</option>
                                 <option value="Coins">Coins</option>
                             </select>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Karat</label>
                             <select class="form-select" required>
@@ -263,6 +265,7 @@
                                 <option value="18K">18 K</option>
                             </select>
                         </div>
+
                         <div id="jewelryOptions" class="mb-3 hidden-field">
                             <label class="form-label">Category</label>
                             <select class="form-select" id="jewelryCategory">
@@ -271,17 +274,17 @@
                                 <option value="Watch">Watch</option>
                                 <option value="Belt">Belt</option>
                                 <option value="Anklet">Anklet</option>
-                                <option value="Other">Other Jewelry</option>
                             </select>
                         </div>
+
                         <div id="coinOptions" class="mb-3 hidden-field">
                             <label class="form-label">Coin Type</label>
                             <select class="form-select" id="coinCategory">
                                 <option value="Rashadi">Rashadi</option>
                                 <option value="English">English</option>
-                                <option value="Other">Other Coin</option>
                             </select>
                         </div>
+
                         <div class="row g-3">
                             <div class="col-6">
                                 <label class="form-label">Buy Price (JOD)</label>
@@ -292,11 +295,13 @@
                                 <input type="number" step="0.01" class="form-control" placeholder="1.00" required>
                             </div>
                         </div>
+
                         <div class="my-3">
                             <label class="form-label">Purchase Date</label>
                             <input type="date" class="form-control" id="purchaseDate" required>
                             <small class="text-muted">Future dates are disabled.</small>
                         </div>
+
                         <div class="mb-2">
                             <label class="form-label">Description / Custom Name</label>
                             <input type="text" class="form-control" placeholder="e.g. Wedding Gift, Family Heirloom">
@@ -311,52 +316,103 @@
         </div>
     </div>
 
-    <!-- PROFILE MODAL -->
-    <div class="modal fade" id="profileModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="d-flex justify-content-end p-2">
-                    <button type="button" class="btn-close xBtn" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4 pt-0">
-                    <div class="text-center mb-4">
-                        <img id="profileModalPic" src="../assets/images/female.png" alt="Profile Avatar" width="80" height="80" class="rounded-circle mb-3 shadow" style="border: 3px solid var(--gold);">
-                        <h1 class="h3" id="profileModalName">My Profile</h1>
-                        <p class="text-muted">Your account information</p>
-                    </div>
-                    <form>
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <label class="form-label text-muted mb-1">First Name</label>
-                                <input type="text" class="form-control" id="profileFirstName" readonly>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label text-muted mb-1">Last Name</label>
-                                <input type="text" class="form-control" id="profileLastName" readonly>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted mb-1">Email Address</label>
-                            <input type="email" class="form-control" id="profileEmail" readonly>
-                        </div>
-                        <div class="mb-5">
-                            <label class="form-label text-muted mb-1">Gender</label>
-                            <input type="text" class="form-control" id="profileGender" readonly>
-                        </div>
-                    </form>
-                </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 GoldVault · Build with your data seaved</p>
+    </footer>
+
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0" style="border-radius:20px; overflow:hidden; background: var(--cream);">
+
+        <!-- Dark Header with Avatar -->
+        <div style="background: linear-gradient(135deg, #1C1A14 0%, #3d2e00 70%, #7a5a10 100%); padding: 28px 28px 0; text-align:center;">
+            <p style="font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,217,138,0.65); margin-bottom:16px;">My Profile</p>
+            <div style="width:84px; height:84px; border-radius:50%; border:3px solid var(--gold-pale); margin:0 auto; overflow:hidden; position:relative; bottom:-18px; background:rgba(201,149,42,0.15);">
+            <img id="profileModalPic" src="../assets/images/female.png" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
             </div>
         </div>
+
+        <!-- Body -->
+        <div style="padding: 32px 28px 24px;">
+            <h5 class="serif fw-bold text-center mb-1" id="profileModalName">—</h5>
+            <p class="text-center text-muted small mb-4" id="profileModalEmail">—</p>
+
+            <hr style="border-color: var(--border);">
+
+            <div class="row g-3 mb-3">
+            <div class="col-6">
+                <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">First Name</div>
+                <div class="fw-semibold" id="profileModalFirst">—</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Last Name</div>
+                <div class="fw-semibold" id="profileModalLast">—</div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Email Address</div>
+                <div class="fw-semibold" id="profileModalEmail2">—</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Gender</div>
+                <div><span class="badge rounded-pill" style="background:rgba(201,149,42,0.12); color:var(--gold-dark); border:1px solid var(--border); font-size:0.8rem;" id="profileModalGender">—</span></div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Member Since</div>
+                <div class="fw-semibold" id="profileModalJoined">—</div>
+                </div>
+            </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="d-flex gap-2 mb-4">
+            <div style="flex:1; background:rgba(201,149,42,0.08); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center;">
+                <div class="serif" style="font-size:1.4rem; font-weight:700; color:var(--gold-dark);" id="profileModalCount">0</div>
+                <div style="font-size:0.72rem; color:var(--muted);">Assets</div>
+            </div>
+            <div style="flex:1; background:rgba(201,149,42,0.08); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center;">
+                <div class="serif" style="font-size:1.4rem; font-weight:700; color:var(--gold-dark);" id="profileModalValue">0</div>
+                <div style="font-size:0.72rem; color:var(--muted);">Portfolio (JOD)</div>
+            </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="d-flex gap-2">
+            <button class="btn btn-light flex-fill" data-bs-dismiss="modal">Close</button>
+            <button class="btn flex-fill text-white sign-out-link" style="background:var(--gold); border:none;">Sign Out</button>
+            </div>
+        </div>
+
+        </div>
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-sha256@0.9.0/src/sha256.min.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="../js/myAssets.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/myAssets.js"></script>
-
-
-
+    <script>
+        function isLoggedIn() {
+            return sessionStorage.getItem("currentUser") !== null;
+        }
+        function requireAuth() {
+            if (!isLoggedIn()) {
+                window.location.href = '../html/index.html';
+            }
+        }
+        requireAuth();
+    </script>
 </body>
 
 </html>

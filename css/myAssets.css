@@ -3,6 +3,15 @@
     --loss-red: #e74c3c;
 }
 
+
+.dropdown-toggle::after {
+    border-top-color: #D4AF37; 
+}
+
+.dropdown-toggle:hover::after {
+    border-top-color: #FFD700; 
+}
+
 .user-name-label { 
     font-size: 0.95rem; 
     font-weight: 600; 
@@ -128,6 +137,16 @@
     z-index: 1;
 }
 
+
+.chart-currency-toggle {
+    display: flex;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    width: 110px;
+    padding-left: 0px;
+    padding-right: 0px;
+    overflow: hidden;
+}
 .currency-toggle.usd-active .toggle-bg {
     left: calc(50%);
 }
