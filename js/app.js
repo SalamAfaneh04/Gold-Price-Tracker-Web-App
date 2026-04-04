@@ -99,16 +99,49 @@ document.addEventListener('DOMContentLoaded', function () {
   // News refreshes every 1 hour
   if (typeof loadNews === 'function') setInterval(loadNews, 3600000);
 
-  // Mobile nav toggle
+  // ── Hamburger / mobile menu ──────────────────────────────────────────
   var toggle = document.getElementById('navToggle');
-  if (toggle) {
-    toggle.addEventListener('click', function () {
-      var links = document.querySelector('.nav-links');
-      var auth = document.querySelector('.nav-auth');
-      if (links) links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
-      if (auth) auth.style.display = auth.style.display === 'flex' ? 'none' : 'flex';
+  var mobileMenu = document.getElementById('mobileMenu');
+
+  if (toggle && mobileMenu) {
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = mobileMenu.classList.contains('open');
+      if (isOpen) {
+        mobileMenu.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.innerHTML = '☰';
+      } else {
+        mobileMenu.classList.add('open');
+        toggle.classList.add('open');
+        toggle.innerHTML = '✕';
+      }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function (e) {
+      if (mobileMenu.classList.contains('open') &&
+          !mobileMenu.contains(e.target) &&
+          e.target !== toggle) {
+        mobileMenu.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.innerHTML = '☰';
+      }
+    });
+
+    // Close menu when a nav link is tapped
+    var mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(function (link) {
+      link.addEventListener('click', function () {
+        mobileMenu.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.innerHTML = '☰';
+      });
     });
   }
+
+  // ── Wire mobile Login / Register buttons to the same modals ─────────
+  // (buttons only exist on desktop nav; hidden on mobile via CSS)
 
   // Visual effects
   if (typeof initSparkles === 'function') initSparkles();
@@ -123,5 +156,3 @@ document.addEventListener('DOMContentLoaded', function () {
   if (toEl) toEl.value = today.toISOString().split('T')[0];
   if (fromEl) fromEl.value = from.toISOString().split('T')[0];
 });
-
-

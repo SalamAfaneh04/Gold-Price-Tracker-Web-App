@@ -50,25 +50,97 @@ function checkEmailExists(email) {
 // ─── Grab navbar buttons ──────────────────────────────────────────────────────
 const loginBtn = document.getElementById('loginBtn');
 const registerBtn = document.getElementById('registerBtn');
-const logoutBtn = document.getElementById('logoutBtn');
+const logoutBtn = document.getElementById('logoutBtn'); // kept for backward compat (myAssets)
 
 function updateNavbar(isLoggedIn) {
-    if (loginBtn === null || registerBtn === null || logoutBtn === null) {
+    var authButtons = document.getElementById('navAuthButtons');
+    var profileDropdown = document.getElementById('navProfileDropdown');
+
+    // OLD navbar style (myAssets page still uses loginBtn/logoutBtn directly)
+    if (authButtons === null && loginBtn !== null) {
+        if (isLoggedIn) {
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (registerBtn) registerBtn.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'inline-block';
+        } else {
+            if (loginBtn) loginBtn.style.display = 'inline-block';
+            if (registerBtn) registerBtn.style.display = 'inline-block';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+        }
         return;
     }
-    
-    if (isLoggedIn === true) {
-        loginBtn.style.display = "none";
-        registerBtn.style.display = "none";
-        logoutBtn.style.display = "inline-block";
+
+    // NEW navbar style (index + prices pages)
+    if (authButtons === null || profileDropdown === null) return;
+
+    if (isLoggedIn) {
+        authButtons.style.display = 'none';
+        profileDropdown.style.display = 'flex';
+
+        // Populate name in trigger
+        var nameEl = document.getElementById('navProfileName');
+        if (nameEl) nameEl.textContent = currentUser.firstName || '';
+
+        // Set avatar based on gender
+        var imgEl = document.getElementById('navProfileImg');
+        if (imgEl) {
+            imgEl.src = currentUser.gender === 'm'
+                ? '../assets/images/male.png'
+                : '../assets/images/female.png';
+        }
+
+        // Populate profile modal fields
+        var joined = currentUser.joinedDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        var setModal = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+        setModal('profileModalName', (currentUser.firstName || '') + ' ' + (currentUser.lastName || ''));
+        setModal('profileModalEmail', currentUser.email);
+        setModal('profileModalFirst', currentUser.firstName);
+        setModal('profileModalLast', currentUser.lastName);
+        setModal('profileModalEmail2', currentUser.email);
+        setModal('profileModalJoined', joined);
+
+        var genderEl = document.getElementById('profileModalGender');
+        if (genderEl) genderEl.textContent = currentUser.gender === 'm' ? 'Male' : currentUser.gender === 'f' ? 'Female' : '—';
+
+        var picEl = document.getElementById('profileModalPic');
+        if (picEl) picEl.src = currentUser.gender === 'm' ? '../assets/images/male.png' : '../assets/images/female.png';
+
     } else {
-        loginBtn.style.display = "inline-block";
-        registerBtn.style.display = "inline-block";
-        logoutBtn.style.display = "none";
+        authButtons.style.display = 'flex';
+        profileDropdown.style.display = 'none';
     }
 }
 
 updateNavbar(currentUser.isLoggedIn);
+
+// ─── Profile dropdown toggle ─────────────────────────────────────────────────
+var profileTrigger = document.getElementById('profileTrigger');
+var profileDropdownMenu = document.getElementById('profileDropdownMenu');
+
+if (profileTrigger && profileDropdownMenu) {
+    profileTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = profileDropdownMenu.classList.contains('open');
+        profileDropdownMenu.classList.toggle('open', !isOpen);
+    });
+
+    document.addEventListener('click', function() {
+        profileDropdownMenu.classList.remove('open');
+    });
+
+    profileDropdownMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+}
+
+// ─── Sign out buttons ────────────────────────────────────────────────────────
+var navLogoutBtn = document.getElementById('navLogoutBtn');
+if (navLogoutBtn) navLogoutBtn.addEventListener('click', window.handleLogout);
+
+var profileModalSignOut = document.getElementById('profileModalSignOut');
+if (profileModalSignOut) profileModalSignOut.addEventListener('click', window.handleLogout);
+
+if (logoutBtn) logoutBtn.addEventListener('click', window.handleLogout);
 
 // ─── ✅ Redirect intent: where did the user want to go? ───────────────────────
 // Set when user clicks a protected link while not logged in.
@@ -76,7 +148,7 @@ updateNavbar(currentUser.isLoggedIn);
 let redirectAfterLogin = null;
 
 // ─── GUARD: only pages with navbar modals run this block ──────────────────────
-if (loginBtn !== null && registerBtn !== null && logoutBtn !== null) {
+if (loginBtn !== null && registerBtn !== null) {
 
     const loginModal = document.getElementById('loginModal');
     const loginModalInstance = new bootstrap.Modal(loginModal);
@@ -100,8 +172,7 @@ if (loginBtn !== null && registerBtn !== null && logoutBtn !== null) {
         redirectAfterLogin = null; // manual register — no redirect intent
         registerModalInstance.show();
     });
-    // handle logout
-    logoutBtn.addEventListener('click', window.handleLogout);
+    // handle logout — handled globally above
 
     // ── ✅ My Assets link (navbar) — save intent then show modal ─────────────
     assetsBtn?.addEventListener('click', function (e) {

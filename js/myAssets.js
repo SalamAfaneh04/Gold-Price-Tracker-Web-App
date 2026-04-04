@@ -4,7 +4,7 @@
  */
 
 // ── GLOBALS ──────────────────────────────────────────────────────────────────
-const currentUser   = JSON.parse(sessionStorage.getItem('currentUser'));
+const assetUser    = JSON.parse(sessionStorage.getItem('currentUser'));
 const selectImg     = document.getElementById('profilePic');
 const USD_TO_JOD    = 0.709;
 const TROY_OZ_TO_G  = 31.1035;
@@ -13,7 +13,7 @@ let currentCurrency     = 'USD';   // active display currency
 let currentOzPriceUSD   = 0;       // live gold price per troy oz in USD
 
 // ── AUTH GUARD ───────────────────────────────────────────────────────────────
-if (!currentUser || !currentUser.isLoggedIn) {
+if (!assetUser  || !assetUser .isLoggedIn) {
     window.location.href = '../html/index.html';
 }
 
