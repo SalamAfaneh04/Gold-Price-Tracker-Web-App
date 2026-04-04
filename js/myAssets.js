@@ -229,7 +229,7 @@ function renderInventory(assets) {
         <div class="col-md-4 col-lg-3">
             <article class="asset-item-card position-relative" style="${borderStyle} cursor:pointer;" onclick="openAssetDetail(${asset.id})">
                 <span class="profit-indicator ${profitClass}">
-                    ${profitSign}${profitPct}%
+                    ${profitSign}${Math.abs(profitPct)}%
                 </span>
                 <div class="asset-card-image-wrapper">
                     <img src="${imgSrc}" alt="Asset" class="asset-card-image">
