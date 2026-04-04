@@ -1,9 +1,12 @@
 // ---- CONFIG ------------------------------------------------------------------------------------------------------------
-var GOLD_API_KEY = 'goldapi-4cglcw2tl8goh-io'; // Replace with your key from gold-api.com
+var GOLD_API_KEY = '0b49e6587559bb4726df4202b9cbcc95690c212ba2ba24a398460b662e00018e';
 var GOLD_API_URL = 'https://api.gold-api.com/price/XAU';
 
 // Currency
 var USD_TO_JOD = 0.709;
+
+// Ticker direction tracking
+var lastTickerOzPrice = 0;
 
 // Gold weights (grams)
 var RASHADI_WEIGHT_G = 6.494;  // gold content in grams (21.6K)
@@ -31,7 +34,7 @@ var priceChart = null;
 
 // ---- FETCH GOLD PRICE ------------------------------------------------------------------------------------------
 function fetchGoldPrice() {
-  fetch(GOLD_API_URL, {})
+  fetch(GOLD_API_URL, { headers: { 'x-api-key': GOLD_API_KEY } })
     .then(function (res) { return res.json(); })
     .then(function (data) {
       if (data && data.price) {
@@ -105,13 +108,9 @@ function updateAllPrices(prevPrice) {
   setEl('rateBar', formatPrice(bar1kg, 0));
 
   // ---- PRICES PAGE ----
-  // Ounce display
-  var ozEl = document.getElementById('ozPrice');
-  if (ozEl) ozEl.textContent = formatOz(oz);
-  var ptEl = document.getElementById('pageTime');
-  if (ptEl) ptEl.textContent = timeStr;
+  // priceUSD, priceJOD, priceTime IDs are shared with home page card above
 
-  // Karat big cards
+  // Karat big cards (may not exist on prices page anymore)
   setEl('k24gram', formatPrice(g24));
   setEl('k21gram', formatPrice(g21));
   setEl('k18gram', formatPrice(getKaratPrice(oz, 18)));
@@ -128,8 +127,10 @@ function updateAllPrices(prevPrice) {
   setEl('rashadiPrice', formatPrice(rashadi));
   setEl('englishPrice', formatPrice(english));
 
-  // Build karat table
+  // Build karat table (hidden, for compatibility)
   buildKaratTable(oz);
+  // Build karat carousel (prices page)
+  buildKaratCarousel(oz);
   // Build bar table
   buildBarTable(oz);
 
@@ -169,6 +170,97 @@ function buildKaratTable(oz) {
   tbody.innerHTML = rows.join('');
 }
 
+// ---- BUILD KARAT CAROUSEL (prices.html) -------------------------------------------------------------------------
+var karatCarouselInstance = null;
+
+function buildKaratCarousel(oz) {
+  var inner = document.getElementById('karatCarouselInner');
+  var progressEl = document.getElementById('karatCarouselProgress');
+  if (!inner) return;
+
+  var karats = [
+    { k: 24, label: '24K', purity: '99.9%', color: '#C9952A' },
+    { k: 22, label: '22K', purity: '91.7%', color: '#C9952A' },
+    { k: 21, label: '21K', purity: '87.5%', color: '#B18E62' },
+    { k: 18, label: '18K', purity: '75.0%', color: '#9e7d3a' },
+    { k: 14, label: '14K', purity: '58.3%', color: '#7a6230' },
+    { k: 12, label: '12K', purity: '50.0%', color: '#7a6230' },
+    { k: 10, label: '10K', purity: '41.7%', color: '#6b5526' },
+    { k: 9,  label: '9K',  purity: '37.5%', color: '#6b5526' }
+  ];
+
+  var slidesHtml = karats.map(function (item, idx) {
+    var g = getGramPrice24K(oz) * (item.k / 24);
+    var isFirst = idx === 0 ? ' active' : '';
+    return '<div class="carousel-item' + isFirst + '">' +
+      '<div class="karat-slide-card">' +
+        '<div>' +
+          '<div class="ks-karat" style="color:' + item.color + '">' + item.label + '</div>' +
+          '<div class="ks-purity">' + item.purity + ' pure gold</div>' +
+        '</div>' +
+        '<div class="ks-divider"></div>' +
+        '<div class="ks-prices">' +
+          '<div class="ks-price-block">' +
+            '<div class="ks-label">Per Gram</div>' +
+            '<div class="ks-value">' + formatPrice(g) + '</div>' +
+          '</div>' +
+          '<div class="ks-price-block">' +
+            '<div class="ks-label">Per Oz</div>' +
+            '<div class="ks-value">' + formatOz(oz * (item.k / 24)) + '</div>' +
+          '</div>' +
+          '<div class="ks-price-block">' +
+            '<div class="ks-label">Per 10g</div>' +
+            '<div class="ks-value">' + formatPrice(g * 10) + '</div>' +
+          '</div>' +
+          '<div class="ks-price-block">' +
+            '<div class="ks-label">Per 100g</div>' +
+            '<div class="ks-value">' + formatPrice(g * 100) + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  inner.innerHTML = slidesHtml;
+
+  // Build tab-style progress nav
+  if (progressEl) {
+    var progressHtml = karats.map(function (item, idx) {
+      var isActive = idx === 0 ? ' active' : '';
+      return '<div class="kcp-item' + isActive + '" data-idx="' + idx + '" onclick="goToKaratSlide(' + idx + ')">' +
+        '<div class="kcp-bar"></div>' +
+        '<div class="kcp-label">' + item.label + '</div>' +
+      '</div>';
+    }).join('');
+    progressEl.innerHTML = progressHtml;
+  }
+
+  // Init Bootstrap carousel and sync progress nav on slide
+  var carouselEl = document.getElementById('karatCarousel');
+  if (carouselEl && typeof bootstrap !== 'undefined') {
+    if (!karatCarouselInstance) {
+      karatCarouselInstance = new bootstrap.Carousel(carouselEl, { interval: false, wrap: true });
+      carouselEl.addEventListener('slid.bs.carousel', function (e) {
+        syncKaratProgress(e.to);
+      });
+    }
+  }
+}
+
+function goToKaratSlide(idx) {
+  if (karatCarouselInstance) {
+    karatCarouselInstance.to(idx);
+  }
+  syncKaratProgress(idx);
+}
+
+function syncKaratProgress(idx) {
+  var items = document.querySelectorAll('.kcp-item');
+  items.forEach(function (el, i) {
+    el.classList.toggle('active', i === idx);
+  });
+}
+
 // ---- BUILD BAR TABLE ----------------------------------------------------------------------------------------------
 function buildBarTable(oz) {
   var tbody = document.getElementById('barTableBody');
@@ -186,9 +278,14 @@ function buildBarTable(oz) {
 
 // ---- TICKER (the track moving line)----------------------------------------------------------------------------------------------------------------
 function buildTicker(oz, g24, g21, g18, rashadi, english) {
+  var dir = oz > lastTickerOzPrice ? 'up' : oz < lastTickerOzPrice ? 'down' : 'same';
+  if (oz !== lastTickerOzPrice) lastTickerOzPrice = oz;
+
+  var arrow = dir === 'up' ? '<span style="color:#5dde8a">▲</span>' : dir === 'down' ? '<span style="color:#ff7c7c">▼</span>' : '';
+
   var items = [
-    'XAU/USD: ' + formatOz(oz),
-    '24K/g: ' + formatPrice(g24),
+    'XAU/USD: ' + formatOz(oz) + ' ' + arrow,
+    '24K/g: ' + formatPrice(g24) + ' ' + arrow,
     '21K/g: ' + formatPrice(g21),
     '18K/g: ' + formatPrice(g18),
     'Rashadi: ' + formatPrice(rashadi),
@@ -198,7 +295,7 @@ function buildTicker(oz, g24, g21, g18, rashadi, english) {
   // Duplicate for seamless loop
   var all = items.concat(items);
   var html = all.map(function (t) {
-    return '<span class="ticker-item">🔶 ' + t + '</span>';
+    return '<span class="ticker-item">🪙 ' + t + '</span>';
   }).join('');
   var track = document.getElementById('tickerTrack');
   if (track) track.innerHTML = html;
@@ -208,14 +305,11 @@ function buildTicker(oz, g24, g21, g18, rashadi, english) {
 function setCurrency(cur) {
   currentCurrency = cur;
 
-  // Sync all .toggle-btn elements by matching text content or id
-  var btns = document.querySelectorAll('.toggle-btn');
+  // Sync all .toggle-btn and .ctoggle elements
+  var btns = document.querySelectorAll('.toggle-btn, .ctoggle');
   btns.forEach(function (b) {
     b.classList.remove('active');
-    // Match by id (btnUSD, btnJOD, btnUSD2, btnJOD2) OR by text content
-    if (b.id === 'btn' + cur || b.id === 'btn' + cur + '2') {
-      b.classList.add('active');
-    } else if (!b.id && b.textContent.trim() === cur) {
+    if (b.textContent.trim() === cur) {
       b.classList.add('active');
     }
   });
@@ -224,48 +318,133 @@ function setCurrency(cur) {
   updateChartCurrency();
 }
 
-// ---- CHART ------------------------------------------------------------------------------------------------------------------
+// ---- CHART HISTORY API ------------------------------------------------------------------------------------------------------------------
+var HISTORY_API_URL = 'https://api.gold-api.com/history';
+var HISTORY_CACHE_KEY = 'goldHistoryCache';
+var HISTORY_CACHE_TTL = 60 * 60 * 1000; // 1 hour in ms
+
+// saveChartPoint is kept as a no-op so existing callers in fetchGoldPrice don't break
 function saveChartPoint(priceUSD) {
-  var stored = localStorage.getItem('goldChartData');
-  if (stored) chartData = JSON.parse(stored);
-
-  var now = new Date();
-  var label = now.getMonth() + 1 + '/' + now.getDate();
-
-  // Keep last 30 data points max
-  chartData.labels.push(label);
-  chartData.usd.push(priceUSD.toFixed(2));
-  chartData.jod.push((priceUSD * USD_TO_JOD).toFixed(2));
-
-  if (chartData.labels.length > 60) {
-    chartData.labels = chartData.labels.slice(-60);
-    chartData.usd = chartData.usd.slice(-60);
-    chartData.jod = chartData.jod.slice(-60);
-  }
-
-  localStorage.setItem('goldChartData', JSON.stringify(chartData));
-  renderChart();
+  // History is now managed via fetchChartHistory — no manual point saving needed
 }
 
-function loadChartData() {
-  var stored = localStorage.getItem('goldChartData');
-  if (stored) {
-    chartData = JSON.parse(stored);
-    renderChart();
-  } else {
-    // Generate placeholder 30-day history
-    var base = 2950;
-    for (var i = 30; i >= 1; i--) {
-      var d = new Date();
-      d.setDate(d.getDate() - i);
-      chartData.labels.push((d.getMonth() + 1) + '/' + d.getDate());
-      var p = base + (Math.random() * 100 - 20);
-      base = p;
-      chartData.usd.push(p.toFixed(2));
-      chartData.jod.push((p * USD_TO_JOD).toFixed(2));
-    }
-    renderChart();
+// Fetch history from API, cache result in localStorage for 1 hour
+function fetchChartHistory(startTimestamp, endTimestamp, groupBy, callback) {
+  groupBy = groupBy || 'day';
+
+  var cacheKey = HISTORY_CACHE_KEY + '_' + startTimestamp + '_' + endTimestamp + '_' + groupBy;
+  var cached = null;
+  try { cached = JSON.parse(localStorage.getItem(cacheKey)); } catch (e) {}
+
+  // Return cached data if still fresh (under 1 hour old)
+  if (cached && cached.fetchedAt && (Date.now() - cached.fetchedAt) < HISTORY_CACHE_TTL) {
+    callback(cached.data);
+    return;
   }
+
+  var url = HISTORY_API_URL +
+    '?symbol=XAU' +
+    '&startTimestamp=' + startTimestamp +
+    '&endTimestamp=' + endTimestamp +
+    '&groupBy=' + groupBy +
+    '&aggregation=max' +
+    '&orderBy=asc';
+
+  fetch(url, {
+    headers: { 'x-api-key': GOLD_API_KEY }
+  })
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      // API returns an array directly
+      var arr = Array.isArray(data) ? data : [];
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify({ fetchedAt: Date.now(), data: arr }));
+      } catch (e) {}
+      callback(arr);
+    })
+    .catch(function (err) {
+      console.warn('History API error:', err);
+      // If we have stale cache, use it rather than showing nothing
+      if (cached && cached.data) {
+        callback(cached.data);
+      } else {
+        callback([]);
+      }
+    });
+}
+
+// Convert API response array into chartData labels/usd/jod
+function parseHistoryToChartData(arr, groupBy) {
+  var result = { labels: [], usd: [], jod: [] };
+  groupBy = groupBy || 'day';
+
+  for (var i = 0; i < arr.length; i++) {
+    var item = arr[i];
+
+    // Build label depending on groupBy
+    var label = '';
+    if (groupBy === 'day' && item.day) {
+      // item.day is usually "YYYY-MM-DD" or a date string
+      var d = new Date(item.day);
+      label = (d.getMonth() + 1) + '/' + d.getDate();
+    } else if (groupBy === 'week' && item.week) {
+      label = 'W' + item.week;
+    } else if (groupBy === 'month' && item.month) {
+      label = item.month; // e.g. "2024-03"
+    } else if (groupBy === 'year' && item.year) {
+      label = String(item.year);
+    } else {
+      // Fallback: use index
+      label = String(i + 1);
+    }
+
+    var price = parseFloat(item.max_price || item.avg_price || item.min_price || 0);
+    if (!price) continue;
+
+    result.labels.push(label);
+    result.usd.push(price.toFixed(2));
+    result.jod.push((price * USD_TO_JOD).toFixed(2));
+  }
+  return result;
+}
+
+// Called once on page load — fetches last 30 days by default
+function loadChartData() {
+  var now = Math.floor(Date.now() / 1000);
+  var thirtyDaysAgo = now - (30 * 24 * 60 * 60);
+
+  // Pre-fill date inputs if present
+  var today = new Date();
+  var from = new Date();
+  from.setDate(today.getDate() - 30);
+  var toEl = document.getElementById('chartDateTo');
+  var fromEl = document.getElementById('chartDateFrom');
+  if (toEl && !toEl.value) toEl.value = today.toISOString().split('T')[0];
+  if (fromEl && !fromEl.value) fromEl.value = from.toISOString().split('T')[0];
+
+  fetchChartHistory(thirtyDaysAgo, now, 'day', function (arr) {
+    if (arr.length === 0) {
+      // Nothing from API — show empty chart with a status message
+      chartData = { labels: [], usd: [], jod: [] };
+      renderChart();
+      setChartStatus('No history data available');
+      return;
+    }
+    chartData = parseHistoryToChartData(arr, 'day');
+    renderChart();
+    setChartStatus('');
+  });
+
+  // Schedule auto-refresh every 1 hour
+  setInterval(function () {
+    var nowTs = Math.floor(Date.now() / 1000);
+    var fromTs = nowTs - (30 * 24 * 60 * 60);
+    fetchChartHistory(fromTs, nowTs, 'day', function (arr) {
+      if (arr.length === 0) return;
+      chartData = parseHistoryToChartData(arr, 'day');
+      renderChart();
+    });
+  }, HISTORY_CACHE_TTL);
 }
 
 function renderChart() {
@@ -358,59 +537,67 @@ function updateChartCurrency() {
   priceChart.update();
 }
 
-// ---- CHART DATE FILTER -----------------------------------------------------------------------------------------
+// ---- CHART STATUS HELPER -----------------------------------------------------------------------------------------
+function setChartStatus(msg) {
+  var el = document.getElementById('chartStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+// ---- CHART DATE FILTER — re-fetches from API for any date range -----------------------------------------------------------------------------------------
 function filterChartByDate() {
   var fromEl = document.getElementById('chartDateFrom');
   var toEl = document.getElementById('chartDateTo');
-  if (!fromEl || !toEl || !priceChart) return;
+  if (!fromEl || !toEl) return;
 
-  var fromVal = fromEl.value;
+  var fromVal = fromEl.value; // "YYYY-MM-DD"
   var toVal = toEl.value;
 
-  var stored = localStorage.getItem('goldChartData');
-  var allData = stored ? JSON.parse(stored) : chartData;
+  // Determine timestamps
+  var startTs, endTs;
+  var now = Math.floor(Date.now() / 1000);
 
-  if (!fromVal && !toVal) {
-    priceChart.data.labels = allData.labels;
-    priceChart.data.datasets[0].data = currentCurrency === 'JOD' ? allData.jod : allData.usd;
-    priceChart.update();
-    return;
+  if (fromVal) {
+    startTs = Math.floor(new Date(fromVal).getTime() / 1000);
+  } else {
+    startTs = now - (30 * 24 * 60 * 60);
   }
 
-  var filtered = { labels: [], usd: [], jod: [] };
-  for (var i = 0; i < allData.labels.length; i++) {
-    var label = allData.labels[i]; // format M/D
-    // Parse label back to a comparable string
-    var parts = label.split('/');
-    if (parts.length === 2) {
-      var year = new Date().getFullYear();
-      var month = parseInt(parts[0]);
-      var day = parseInt(parts[1]);
-      var pointDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-      var keep = true;
-      if (fromVal && pointDate < fromVal) keep = false;
-      if (toVal && pointDate > toVal) keep = false;
-      if (keep) {
-        filtered.labels.push(label);
-        filtered.usd.push(allData.usd[i]);
-        filtered.jod.push(allData.jod[i]);
-      }
+  if (toVal) {
+    // End of that day
+    endTs = Math.floor(new Date(toVal + 'T23:59:59').getTime() / 1000);
+  } else {
+    endTs = now;
+  }
+
+  // Choose groupBy based on range size
+  var rangeDays = (endTs - startTs) / (60 * 60 * 24);
+  var groupBy = 'day';
+  if (rangeDays > 365 * 3) groupBy = 'month';
+  else if (rangeDays > 365) groupBy = 'week';
+
+  setChartStatus('Loading...');
+
+  fetchChartHistory(startTs, endTs, groupBy, function (arr) {
+    if (arr.length === 0) {
+      setChartStatus('No data for selected range');
+      return;
     }
-  }
-
-  var isJOD = currentCurrency === 'JOD';
-  var sym = isJOD ? 'JD' : '$';
-  priceChart.data.labels = filtered.labels;
-  priceChart.data.datasets[0].data = isJOD ? filtered.jod : filtered.usd;
-  priceChart.data.datasets[0].label = 'XAU (' + sym + ')';
-  priceChart.update();
+    chartData = parseHistoryToChartData(arr, groupBy);
+    renderChart();
+    setChartStatus('');
+  });
 }
 
 function resetChartFilter() {
   var fromEl = document.getElementById('chartDateFrom');
   var toEl = document.getElementById('chartDateTo');
-  if (fromEl) fromEl.value = '';
-  if (toEl) toEl.value = '';
+  var today = new Date();
+  var from = new Date();
+  from.setDate(today.getDate() - 30);
+  if (fromEl) fromEl.value = from.toISOString().split('T')[0];
+  if (toEl) toEl.value = today.toISOString().split('T')[0];
   filterChartByDate();
 }
 
@@ -439,4 +626,4 @@ function calculate() {
     '<strong style="color:var(--gold)">' + sym + ' ' + converted.toFixed(2) + '</strong>' +
     ' &nbsp;·&nbsp; ' +
     '<small style="color:var(--muted)">' + sym + ' ' + convertPrice(gramPrice).toFixed(2) + '/g</small>';
-}
+}
