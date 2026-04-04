@@ -9,7 +9,7 @@ var NEWS_API_URL = 'https://gnews.io/api/v4/search?q=gold+price+OR+gold+market+O
 var newsCarouselIndex = 0;
 var newsArticlesData = []; // Store full article data for modal
 
-function loadNews() {
+async function loadNews() {
   var grid = document.getElementById('newsGrid');
   if (!grid) return;
 
@@ -30,21 +30,22 @@ function loadNews() {
     }
   }
 
-  fetch(NEWS_API_URL)
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      if (data && data.articles && data.articles.length) {
-        // Cache the result in localStorage
-        localStorage.setItem('savedGoldNewsV3', JSON.stringify(data));
-        localStorage.setItem('savedGoldNewsTimeV3', now.toString());
-        renderNews(data.articles);
-      } else {
-        renderFallbackNews();
-      }
-    })
-    .catch(function () {
+
+  try {
+    const res = await fetch(NEWS_API_URL);
+    const data = await res.json();
+    if (data && data.articles && data.articles.length) {
+      // Cache the result in localStorage
+      localStorage.setItem('savedGoldNewsV3', JSON.stringify(data));
+      localStorage.setItem('savedGoldNewsTimeV3', now.toString());
+      renderNews(data.articles);
+    } else {
       renderFallbackNews();
-    });
+    }
+  } catch (error) {
+    console.warn("Error fetching news:", error);
+    renderFallbackNews();
+  }
 }
 
 function renderNews(articles) {
@@ -151,6 +152,36 @@ function renderFallbackNews() {
       source: 'Kitco',
       date: 'Wednesday, March 26, 2026',
       dateShort: 'Mar 26, 2026'
+    },
+    {
+      title: 'Geopolitical tensions boost safe-haven appeal of gold in European markets',
+      description: 'European demand for physical gold surged this week as investors sought protection amid escalating geopolitical tensions over trade routes and energy supply constraints.',
+      content: 'Major European bullion dealers reported a 30% increase in retail sales of coins and small bars. Market participants point to a general lack of confidence in fiat currencies amid shifting international dynamics.',
+      image: '../assets/images/old-news.png',
+      url: '#',
+      source: 'Financial Times',
+      date: 'Tuesday, March 25, 2026',
+      dateShort: 'Mar 25, 2026'
+    },
+    {
+      title: 'Analysts project gold will surpass $3,200 by year-end on monetary policy shifts',
+      description: 'Several major investment banks have upgraded their gold price forecasts, predicting the metal could exceed $3,200 per ounce before the end of the year if central banks scale back tightening.',
+      content: 'The revised forecasts hinge on expectations that inflationary pressures will moderate, prompting a pause in rate hikes that would reduce the opportunity cost of holding non-yielding bullion.',
+      image: '../assets/images/old-news.png',
+      url: '#',
+      source: 'Wall Street Journal',
+      date: 'Monday, March 24, 2026',
+      dateShort: 'Mar 24, 2026'
+    },
+    {
+      title: 'Mining sector stocks lag physical gold as operational costs squeeze margins',
+      description: 'Despite record high gold prices, stocks of major mining companies have underperformed the physical metal due to stubbornly high energy and equipment costs.',
+      content: 'Gold miners report that aggressive inflation in input materials like diesel and explosives has offset much of the revenue gained from rising gold prices, frustrating equity investors.',
+      image: '../assets/images/old-news.png',
+      url: '#',
+      source: 'MarketWatch',
+      date: 'Sunday, March 23, 2026',
+      dateShort: 'Mar 23, 2026'
     }
   ];
 

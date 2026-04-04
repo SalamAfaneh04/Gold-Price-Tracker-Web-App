@@ -14,6 +14,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/auth.css">
 
@@ -63,16 +66,29 @@
                     <div class="profile-avatar">
                         <img id="navProfileImg" src="../assets/images/female.png" alt="Profile" />
                     </div>
-                    <svg class="profile-caret" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                    <svg class="profile-caret" width="10" height="6" viewBox="0 0 10 6">
+                        <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none"
+                            stroke-linecap="round" />
+                    </svg>
                 </button>
                 <div class="profile-dropdown-menu" id="profileDropdownMenu">
-                    <button class="profile-menu-item" id="navMyProfileBtn" data-bs-toggle="modal" data-bs-target="#profileModal">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    <button class="profile-menu-item" id="navMyProfileBtn" data-bs-toggle="modal"
+                        data-bs-target="#profileModal">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="8" r="4" />
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                        </svg>
                         My Profile
                     </button>
                     <div class="profile-menu-divider"></div>
                     <button class="profile-menu-item danger" id="navLogoutBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
                         Sign Out
                     </button>
                 </div>
@@ -90,7 +106,8 @@
         <a href="../html/myAssets.html">My Assets</a>
         <div class="mobile-menu-divider"></div>
         <div style="display:flex;gap:8px;align-items:center;padding:8px 16px;">
-            <span style="font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Currency:</span>
+            <span
+                style="font-size:0.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Currency:</span>
             <div class="currency-toggle" style="margin-left:auto;">
                 <button class="toggle-btn active" id="mobileBtnUSD" onclick="setCurrency('USD')">USD</button>
                 <button class="toggle-btn" id="mobileBtnJOD" onclick="setCurrency('JOD')">JOD</button>
@@ -256,7 +273,7 @@
 
     <!-- NEWS DETAIL MODAL (Bootstrap Format) -->
     <div class="modal fade" id="newsModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content overflow-hidden">
                 <div class="d-flex justify-content-end p-2 position-absolute w-100" style="z-index: 10;">
                     <button type="button" class="btn-close bg-white bg-opacity-75 rounded-circle p-2"
@@ -265,23 +282,25 @@
 
                 <!-- Image at top, full width, no spacing -->
                 <img class="img-fluid w-100" id="newsModalImg" src="" alt="" onerror="this.style.display='none'"
-                    style="max-height: 350px; object-fit: cover; border-top-left-radius: var(--bs-modal-inner-border-radius); border-top-right-radius: var(--bs-modal-inner-border-radius);" />
+                    style="max-height: 250px; object-fit: cover; border-top-left-radius: var(--bs-modal-inner-border-radius); border-top-right-radius: var(--bs-modal-inner-border-radius);" />
 
                 <div class="modal-body p-4 pt-4 text-start">
-                    <!-- Title -->
-                    <h2 class="h3 fw-bold mb-3" id="newsModalTitle" style="font-family: 'Cormorant Garamond', serif;">
-                    </h2>
+                    <!-- Title & Link Icon -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h2 class="h3 fw-bold mb-0" id="newsModalTitle"
+                            style="font-family: 'Cormorant Garamond', serif; padding-right: 15px;"></h2>
+                        <a id="newsModalLink" href="#" target="_blank" rel="noopener" class="mt-1"
+                            style="color: var(--gold-dark); flex-shrink: 0; text-decoration: none;"
+                            title="Read original article">
+                            <i class="bi bi-box-arrow-up-right"
+                                style="font-size: 1.25rem; color: var(--gold-dark); transition: color 0.2s;"
+                                onmouseover="this.style.color='var(--gold)'"
+                                onmouseout="this.style.color='var(--gold-dark)'"></i>
+                        </a>
+                    </div>
 
                     <!-- Description -->
                     <p class="text-muted mb-4" id="newsModalDesc" style="font-size: 1.05rem; line-height: 1.6;"></p>
-
-                    <!-- URL named source and as text link -->
-                    <div class="mb-4">
-                        <a id="newsModalLink" href="#" target="_blank" rel="noopener"
-                            style="color: var(--gold-dark); text-decoration: underline; font-weight: 500; font-size: 1rem;">
-                            source
-                        </a>
-                    </div>
 
                     <!-- Published At & Source name -->
                     <div class="d-flex justify-content-between align-items-center mt-2 pt-3 border-top">
@@ -412,11 +431,17 @@
     <!-- Profile Modal -->
     <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content shadow-lg border-0" style="border-radius:20px; overflow:hidden; background: var(--cream);">
-                <div style="background: linear-gradient(135deg, #1C1A14 0%, #3d2e00 70%, #7a5a10 100%); padding: 28px 28px 0; text-align:center;">
-                    <p style="font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,217,138,0.65); margin-bottom:16px;">My Profile</p>
-                    <div style="width:84px; height:84px; border-radius:50%; border:3px solid var(--gold-pale); margin:0 auto; overflow:hidden; position:relative; bottom:-18px; background:rgba(201,149,42,0.15);">
-                        <img id="profileModalPic" src="../assets/images/female.png" alt="Profile" style="width:100%; height:100%; object-fit:cover;">
+            <div class="modal-content shadow-lg border-0"
+                style="border-radius:20px; overflow:hidden; background: var(--cream);">
+                <div
+                    style="background: linear-gradient(135deg, #1C1A14 0%, #3d2e00 70%, #7a5a10 100%); padding: 28px 28px 0; text-align:center;">
+                    <p
+                        style="font-size:0.72rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,217,138,0.65); margin-bottom:16px;">
+                        My Profile</p>
+                    <div
+                        style="width:84px; height:84px; border-radius:50%; border:3px solid var(--gold-pale); margin:0 auto; overflow:hidden; position:relative; bottom:-18px; background:rgba(201,149,42,0.15);">
+                        <img id="profileModalPic" src="../assets/images/female.png" alt="Profile"
+                            style="width:100%; height:100%; object-fit:cover;">
                     </div>
                 </div>
                 <div style="padding: 32px 28px 24px;">
@@ -425,49 +450,71 @@
                     <hr style="border-color: var(--border);">
                     <div class="row g-3 mb-3">
                         <div class="col-6">
-                            <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
-                                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">First Name</div>
+                            <div
+                                style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                                <div
+                                    style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">
+                                    First Name</div>
                                 <div class="fw-semibold" id="profileModalFirst">—</div>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
-                                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Last Name</div>
+                            <div
+                                style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                                <div
+                                    style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">
+                                    Last Name</div>
                                 <div class="fw-semibold" id="profileModalLast">—</div>
                             </div>
                         </div>
                         <div class="col-12">
-                            <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
-                                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Email Address</div>
+                            <div
+                                style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                                <div
+                                    style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">
+                                    Email Address</div>
                                 <div class="fw-semibold" id="profileModalEmail2">—</div>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
-                                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Gender</div>
-                                <div><span class="badge rounded-pill" style="background:rgba(201,149,42,0.12); color:var(--gold-dark); border:1px solid var(--border); font-size:0.8rem;" id="profileModalGender">—</span></div>
+                            <div
+                                style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                                <div
+                                    style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">
+                                    Gender</div>
+                                <div><span class="badge rounded-pill"
+                                        style="background:rgba(201,149,42,0.12); color:var(--gold-dark); border:1px solid var(--border); font-size:0.8rem;"
+                                        id="profileModalGender">—</span></div>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
-                                <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">Member Since</div>
+                            <div
+                                style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px;">
+                                <div
+                                    style="font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;">
+                                    Member Since</div>
                                 <div class="fw-semibold" id="profileModalJoined">—</div>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex gap-2 mb-4">
-                        <div style="flex:1; background:rgba(201,149,42,0.08); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center;">
-                            <div class="serif" style="font-size:1.4rem; font-weight:700; color:var(--gold-dark);" id="profileModalCount">0</div>
+                        <div
+                            style="flex:1; background:rgba(201,149,42,0.08); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center;">
+                            <div class="serif" style="font-size:1.4rem; font-weight:700; color:var(--gold-dark);"
+                                id="profileModalCount">0</div>
                             <div style="font-size:0.72rem; color:var(--muted);">Assets</div>
                         </div>
-                        <div style="flex:1; background:rgba(201,149,42,0.08); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center;">
-                            <div class="serif" style="font-size:1.4rem; font-weight:700; color:var(--gold-dark);" id="profileModalValue">0</div>
+                        <div
+                            style="flex:1; background:rgba(201,149,42,0.08); border:1px solid var(--border); border-radius:10px; padding:10px 8px; text-align:center;">
+                            <div class="serif" style="font-size:1.4rem; font-weight:700; color:var(--gold-dark);"
+                                id="profileModalValue">0</div>
                             <div style="font-size:0.72rem; color:var(--muted);">Portfolio (JOD)</div>
                         </div>
                     </div>
                     <div class="d-flex gap-2">
                         <button class="btn btn-light flex-fill" data-bs-dismiss="modal">Close</button>
-                        <button class="btn flex-fill text-white sign-out-link" id="profileModalSignOut" style="background:var(--gold); border:none;">Sign Out</button>
+                        <button class="btn flex-fill text-white sign-out-link" id="profileModalSignOut"
+                            style="background:var(--gold); border:none;">Sign Out</button>
                     </div>
                 </div>
             </div>

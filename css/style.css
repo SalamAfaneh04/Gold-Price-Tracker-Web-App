@@ -812,8 +812,7 @@ em {
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: all 0.25s;
+  transition: transform 0.25s, border-color 0.25s;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -821,7 +820,6 @@ em {
 
 .news-card:hover .news-card-inner {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
   border-color: rgba(201, 149, 42, 0.35);
 }
 
