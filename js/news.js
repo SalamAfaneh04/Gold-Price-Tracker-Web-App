@@ -2,7 +2,7 @@
 // IDEAS TO NOT HARDCODE: 
 // 1. Fetch from a secure backend endpoint where the key is stored securely.
 // 2. Use a build pipeline (e.g. Webpack/Vite) with an .env file for environment variables.
-var NEWS_API_KEY = 'ca81b03378b60b782adadf2333a2c74f';
+var NEWS_API_KEY = '4607e42e4f5637b49a3af563e17e42b2';
 var NEWS_API_URL = 'https://gnews.io/api/v4/search?q=gold+price+OR+gold+market+OR+gold+forecast&lang=en&max=9&apikey=' + NEWS_API_KEY;
 
 // ---- NEWS CAROUSEL -----------------------------------------------------------------------------------------------------------
