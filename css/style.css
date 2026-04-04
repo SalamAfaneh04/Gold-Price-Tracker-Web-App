@@ -2378,3 +2378,121 @@ td.bold {
   box-shadow: 0 12px 40px rgba(201, 149, 42, 0.22);
   border-color: rgba(201, 149, 42, 0.45);
 }
+/* ── MOBILE PROFILE ICON + DROPDOWN ── */
+.mobile-profile-wrap {
+  display: none;
+  position: relative;
+}
+
+.mobile-profile-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-profile-icon-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mobile-profile-icon-btn:hover {
+  border-color: var(--gold);
+}
+
+.mobile-profile-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  min-width: 175px;
+  z-index: 2000;
+  padding: 6px 0;
+  overflow: hidden;
+}
+
+.mobile-profile-dropdown.open {
+  display: block;
+}
+
+.mobile-profile-user-info {
+  padding: 10px 16px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gold-dark);
+  border-bottom: none;
+}
+
+.mobile-profile-menu-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 0;
+}
+
+.mobile-profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.mobile-profile-menu-item svg {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.mobile-profile-menu-item:hover {
+  background: rgba(201, 149, 42, 0.07);
+  color: var(--gold-dark);
+}
+
+.mobile-profile-menu-item:hover svg {
+  color: var(--gold);
+}
+
+.mobile-profile-menu-item.danger {
+  color: #c0392b;
+}
+
+.mobile-profile-menu-item.danger svg {
+  color: #c0392b;
+}
+
+.mobile-profile-menu-item.danger:hover {
+  background: rgba(192, 57, 43, 0.07);
+}
+
+@media (max-width: 768px) {
+  .mobile-profile-wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  /* Hide the desktop profile dropdown on mobile — mobile icon replaces it */
+  .nav-profile-dropdown {
+    display: none !important;
+  }
+}
