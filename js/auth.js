@@ -224,6 +224,18 @@ if (loginBtn !== null && registerBtn !== null) {
         }
     });
 
+    // ── ✅ My Assets link (mobile menu) — same logic ─────────────────────────
+    const mobileAssetsBtn = document.getElementById('mobileAssetsBtn');
+    mobileAssetsBtn?.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (currentUser.isLoggedIn) {
+            window.location.href = "../html/myAssets.html";
+        } else {
+            redirectAfterLogin = "../html/myAssets.html";
+            loginModalInstance.show();
+        }
+    });
+
     // ── ✅ Manage Assets CTA (hero section) — same logic ─────────────────────
     manageAssetsBtn?.addEventListener('click', function (e) {
         e.preventDefault();
