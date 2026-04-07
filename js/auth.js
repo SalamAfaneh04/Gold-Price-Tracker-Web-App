@@ -56,22 +56,7 @@ function updateNavbar(isLoggedIn) {
     var authButtons = document.getElementById('navAuthButtons');
     var profileDropdown = document.getElementById('navProfileDropdown');
 
-    // OLD navbar style (myAssets page still uses loginBtn/logoutBtn directly)
-    if (authButtons === null && loginBtn !== null) {
-        if (isLoggedIn) {
-            if (loginBtn) loginBtn.style.display = 'none';
-            if (registerBtn) registerBtn.style.display = 'none';
-            if (logoutBtn) logoutBtn.style.display = 'inline-block';
-        } else {
-            if (loginBtn) loginBtn.style.display = 'inline-block';
-            if (registerBtn) registerBtn.style.display = 'inline-block';
-            if (logoutBtn) logoutBtn.style.display = 'none';
-        }
-        updateMobileMenu(isLoggedIn);
-        return;
-    }
-
-    // NEW navbar style (index + prices pages)
+    // NEW navbar style (index + prices + myAssets)
     if (authButtons === null || profileDropdown === null) {
         updateMobileMenu(isLoggedIn);
         return;
@@ -85,12 +70,22 @@ function updateNavbar(isLoggedIn) {
         var nameEl = document.getElementById('navProfileName');
         if (nameEl) nameEl.textContent = currentUser.firstName || '';
 
-        // Set avatar based on gender
+        // Helper to resolve paths regardless of whether we are in root or /html/ folder
+        var resolveImagePath = function(path) {
+            // If we are at the root (index.html), we remove '../' from the assets path
+            var isRoot = window.location.pathname.endsWith('index.html') && !window.location.pathname.includes('/html/');
+            if (isRoot && path.startsWith('../')) {
+                return path.substring(3);
+            }
+            return path;
+        };
+
+        // Set avatar based on gender (handling 'm', 'M', 'male', 'Male')
         var imgEl = document.getElementById('navProfileImg');
         if (imgEl) {
-            imgEl.src = currentUser.gender === 'm'
-                ? '../assets/images/male.png'
-                : '../assets/images/female.png';
+            var g = (currentUser.gender || '').toLowerCase();
+            var avatarPath = (g === 'm' || g === 'male') ? '../assets/images/male.png' : '../assets/images/female.png';
+            imgEl.src = resolveImagePath(avatarPath);
         }
 
         // Populate profile modal fields
@@ -106,8 +101,12 @@ function updateNavbar(isLoggedIn) {
         var genderEl = document.getElementById('profileModalGender');
         if (genderEl) genderEl.textContent = currentUser.gender === 'm' ? 'Male' : currentUser.gender === 'f' ? 'Female' : '—';
 
+        var g = (currentUser.gender || '').toLowerCase();
         var picEl = document.getElementById('profileModalPic');
-        if (picEl) picEl.src = currentUser.gender === 'm' ? '../assets/images/male.png' : '../assets/images/female.png';
+        if (picEl) {
+            var modalPath = (g === 'm' || g === 'male') ? '../assets/images/male.png' : '../assets/images/female.png';
+            picEl.src = resolveImagePath(modalPath);
+        }
 
     } else {
         authButtons.style.display = 'flex';
@@ -119,34 +118,12 @@ function updateNavbar(isLoggedIn) {
 
 function updateMobileMenu(isLoggedIn) {
     var mobileAuth = document.getElementById('mobileAuthButtons');
-    var mobileProfile = document.getElementById('mobileProfileSection');
-    if (!mobileAuth || !mobileProfile) return;
+    if (!mobileAuth) return;
 
     if (isLoggedIn) {
         mobileAuth.style.display = 'none';
-        mobileProfile.style.display = 'block';
-
-        var mobileNameEl = document.getElementById('mobileProfileName');
-        if (mobileNameEl) mobileNameEl.textContent = (currentUser.firstName || '') + ' ' + (currentUser.lastName || '');
-
-        var mobileImgEl = document.getElementById('mobileProfileImg');
-        if (mobileImgEl) {
-            mobileImgEl.src = currentUser.gender === 'm'
-                ? '../assets/images/male.png'
-                : '../assets/images/female.png';
-        }
     } else {
         mobileAuth.style.display = 'flex';
-        mobileProfile.style.display = 'none';
-    }
-
-    // Wire mobile logout button (only once)
-    var mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
-    if (mobileLogoutBtn && !mobileLogoutBtn._bound) {
-        mobileLogoutBtn.addEventListener('click', function () {
-            logout();
-        });
-        mobileLogoutBtn._bound = true;
     }
 }
 

@@ -2005,9 +2005,7 @@ td.bold {
     gap: 6px;
   }
 
-  .nav-profile-dropdown {
-    display: flex !important;
-  }
+  /* NOTE: do NOT force display here — JS controls show/hide based on login state */
 }
 
 /* ============================
