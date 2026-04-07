@@ -56,11 +56,22 @@ function updateNavbar(isLoggedIn) {
     var authButtons = document.getElementById('navAuthButtons');
     var profileDropdown = document.getElementById('navProfileDropdown');
 
-    // NEW navbar style (index + prices + myAssets)
-    if (authButtons === null || profileDropdown === null) {
-        updateMobileMenu(isLoggedIn);
+    // OLD navbar style (myAssets page still uses loginBtn/logoutBtn directly)
+    if (authButtons === null && loginBtn !== null) {
+        if (isLoggedIn) {
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (registerBtn) registerBtn.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'inline-block';
+        } else {
+            if (loginBtn) loginBtn.style.display = 'inline-block';
+            if (registerBtn) registerBtn.style.display = 'inline-block';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+        }
         return;
     }
+
+    // NEW navbar style (index + prices pages)
+    if (authButtons === null || profileDropdown === null) return;
 
     if (isLoggedIn) {
         authButtons.style.display = 'none';
@@ -113,23 +124,15 @@ function updateNavbar(isLoggedIn) {
         profileDropdown.style.display = 'none';
     }
 
-    updateMobileMenu(isLoggedIn);
-}
-
-function updateMobileMenu(isLoggedIn) {
-    var mobileAuth = document.getElementById('mobileAuthButtons');
-    if (!mobileAuth) return;
-
-    if (isLoggedIn) {
-        mobileAuth.style.display = 'none';
-    } else {
-        mobileAuth.style.display = 'flex';
+    // Keep mobile icon in sync too
+    if (typeof updateMobileProfileIcon === 'function') {
+        updateMobileProfileIcon(isLoggedIn);
     }
 }
 
 updateNavbar(currentUser.isLoggedIn);
 
-// ─── Profile dropdown toggle ─────────────────────────────────────────────────
+// ─── Profile dropdown toggle (desktop) ───────────────────────────────────────
 var profileTrigger = document.getElementById('profileTrigger');
 var profileDropdownMenu = document.getElementById('profileDropdownMenu');
 
@@ -146,6 +149,84 @@ if (profileTrigger && profileDropdownMenu) {
 
     profileDropdownMenu.addEventListener('click', function(e) {
         e.stopPropagation();
+    });
+}
+
+// ─── Mobile profile icon dropdown ────────────────────────────────────────────
+function updateMobileProfileIcon(isLoggedIn) {
+    var iconImg      = document.getElementById('mobileProfileIconImg');
+    var authLinks    = document.getElementById('mobileAuthLinks');
+    var userLinks    = document.getElementById('mobileUserLinks');
+    var userInfo     = document.getElementById('mobileProfileUserInfo');
+
+    if (!iconImg) return;
+
+    if (isLoggedIn) {
+        // Set avatar
+        iconImg.src = currentUser.gender === 'm'
+            ? '../assets/images/male.png'
+            : '../assets/images/female.png';
+        // Show user name in dropdown header
+        if (userInfo) userInfo.textContent = currentUser.firstName || currentUser.email || '';
+        if (authLinks) authLinks.style.display = 'none';
+        if (userLinks) userLinks.style.display = 'block';
+    } else {
+        iconImg.src = '../assets/images/female.png';
+        if (authLinks) authLinks.style.display = 'block';
+        if (userLinks) userLinks.style.display = 'none';
+    }
+}
+
+updateMobileProfileIcon(currentUser.isLoggedIn);
+
+var mobileProfileIconBtn = document.getElementById('mobileProfileIconBtn');
+var mobileProfileDropdown = document.getElementById('mobileProfileDropdown');
+
+if (mobileProfileIconBtn && mobileProfileDropdown) {
+    mobileProfileIconBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = mobileProfileDropdown.classList.contains('open');
+        mobileProfileDropdown.classList.toggle('open', !isOpen);
+    });
+
+    mobileProfileDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+
+    document.addEventListener('click', function() {
+        mobileProfileDropdown.classList.remove('open');
+    });
+}
+
+// Mobile login / register buttons → open the same modals
+var mobileLoginBtn = document.getElementById('mobileLoginBtn');
+var mobileRegisterBtn = document.getElementById('mobileRegisterBtn');
+
+if (mobileLoginBtn) {
+    mobileLoginBtn.addEventListener('click', function() {
+        if (mobileProfileDropdown) mobileProfileDropdown.classList.remove('open');
+        var loginModal = document.getElementById('loginModal');
+        if (loginModal) new bootstrap.Modal(loginModal).show();
+    });
+}
+
+if (mobileRegisterBtn) {
+    mobileRegisterBtn.addEventListener('click', function() {
+        if (mobileProfileDropdown) mobileProfileDropdown.classList.remove('open');
+        var registerModal = document.getElementById('registerModal');
+        if (registerModal) new bootstrap.Modal(registerModal).show();
+    });
+}
+
+// Mobile logout button
+var mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+if (mobileLogoutBtn) mobileLogoutBtn.addEventListener('click', window.handleLogout);
+
+// Mobile "My Profile" button — closes dropdown before modal opens
+var mobileMyProfileBtn = document.getElementById('mobileMyProfileBtn');
+if (mobileMyProfileBtn) {
+    mobileMyProfileBtn.addEventListener('click', function() {
+        if (mobileProfileDropdown) mobileProfileDropdown.classList.remove('open');
     });
 }
 
@@ -197,18 +278,6 @@ if (loginBtn !== null && registerBtn !== null) {
             window.location.href = "../html/myAssets.html";
         } else {
             redirectAfterLogin = "../html/myAssets.html"; // ← save destination
-            loginModalInstance.show();
-        }
-    });
-
-    // ── ✅ My Assets link (mobile menu) — same logic ─────────────────────────
-    const mobileAssetsBtn = document.getElementById('mobileAssetsBtn');
-    mobileAssetsBtn?.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (currentUser.isLoggedIn) {
-            window.location.href = "../html/myAssets.html";
-        } else {
-            redirectAfterLogin = "../html/myAssets.html";
             loginModalInstance.show();
         }
     });
