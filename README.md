@@ -67,7 +67,7 @@ Gold-Price-Tracker-Web-App/
 | :--- | :--- |
 | **Salam Afaneh** | Scrum Master |
 | **Hanan Othman** | Product Owner |
-| **Hussam Al-khateeb** |
+| **Hussam Al-khateeb** | Developer |
 
 ---
 
